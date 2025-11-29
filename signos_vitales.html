@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SHADT - Signos Vitales</title>
+
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  >
+  <link rel="stylesheet" href="css/styles.css">
+
+  <style>
+    .sv-label-box {
+      background-color:#7FE6F3;
+      color:#000;
+      font-weight:700;
+      text-transform:uppercase;
+      font-size:0.8rem;
+      padding:3px 8px;
+      border-radius:2px;
+      text-align:center;
+      letter-spacing:0.5px;
+      min-width:90px;
+      display:inline-block;
+    }
+
+    .sv-input {
+      height:28px;
+      font-size:0.85rem;
+      padding:2px 8px;
+      text-align:center;
+    }
+
+    .sv-text {
+      font-size:0.85rem;
+    }
+
+    .sv-msg {
+      font-size:0.8rem;
+    }
+  </style>
+</head>
+<body class="app-body">
+
+<div class="d-flex">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar bg-dark text-white">
+    <div class="p-3 text-center border-bottom border-secondary">
+      <div class="shadt-logo-side mb-1">SHADT</div>
+    </div>
+
+    <nav class="nav flex-column p-2 mt-2">
+      <span class="text-uppercase text-muted small mb-2">Módulos</span>
+      <a href="admision.html" class="nav-link text-white">ADMISIÓN</a>
+      <a href="signos_vitales.html" class="nav-link text-white active">SIGNOS VITALES</a>
+      <a href="historia_clinica.html" class="nav-link text-white">HISTORIA CLÍNICA</a>
+      <a href="salida.html" class="nav-link text-white">SALIDA</a>
+      <a href="acostar.html" class="nav-link text-white">ACOSTAR</a>
+      <a href="estadia_alta.html" class="nav-link text-white">ESTADÍA Y ALTA PACIENTE</a>
+      <a href="informes.html" class="nav-link text-white">INFORMES</a>
+    </nav>
+
+    <div class="mt-auto p-3 border-top border-secondary small">
+      <div>Usuario: <strong>Desarrollador</strong></div>
+      <a href="modulos.html" class="text-decoration-none text-light d-block mb-1">
+        Ir a módulos
+      </a>
+      <a href="index.html" class="text-decoration-none text-danger">
+        Cerrar sesión
+      </a>
+    </div>
+  </aside>
+
+  <!-- CONTENIDO -->
+  <main class="flex-grow-1 app-main app-bg-medico">
+    <div class="container py-4">
+
+      <h1 class="h5 mb-2">Signos vitales del paciente</h1>
+      <div id="sv-msg" class="sv-msg text-primary mb-3"></div>
+
+      <form id="sv-form">
+        <fieldset id="sv-fieldset">
+
+          <!-- DATOS BÁSICOS -->
+          <div class="card bg-semitransparent mb-3">
+            <div class="card-body">
+              <div class="row g-3 align-items-center sv-text">
+                <div class="col-md-3 d-flex align-items-center gap-2">
+                  <span class="sv-label-box">Tipo ID</span>
+                  <span id="sv-tipoid" class="fw-bold"></span>
+                </div>
+                <div class="col-md-3 d-flex align-items-center gap-2">
+                  <span class="sv-label-box">Documento</span>
+                  <input type="text" id="sv-doc" class="form-control sv-input" readonly>
+                </div>
+                <div class="col-md-3 d-flex align-items-center gap-2">
+                  <span class="sv-label-box">Nombre</span>
+                  <input type="text" id="sv-nombre" class="form-control sv-input" readonly>
+                </div>
+                <div class="col-md-3 d-flex align-items-center gap-2">
+                  <span class="sv-label-box">Sexo</span>
+                  <input type="text" id="sv-sexo" class="form-control sv-input" readonly>
+                </div>
+              </div>
+
+              <div class="row g-3 align-items-center mt-2 sv-text">
+                <div class="col-md-4 d-flex align-items-center gap-2">
+                  <span class="sv-label-box">Fecha y hora</span>
+                  <input type="datetime-local" id="sv-fecha-hora" class="form-control sv-input">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- SIGNOS -->
+          <div class="row g-3">
+            <!-- FC -->
+            <div class="col-md-6">
+              <div class="card bg-semitransparent h-100">
+                <div class="card-body">
+                  <h5 class="card-title mb-3">Frecuencia cardíaca (lpm)</h5>
+
+                  <div class="form-check mb-2 text-success">
+                    <input class="form-check-input" type="radio" name="fc" id="fcNormal" value="normal">
+                    <label class="form-check-label" for="fcNormal">
+                      Normal (60–100) – <span class="badge bg-success">Verde</span>
+                    </label>
+                  </div>
+
+                  <div class="form-check mb-2 text-warning">
+                    <input class="form-check-input" type="radio" name="fc" id="fcAlta" value="ligeramente_alta">
+                    <label class="form-check-label" for="fcAlta">
+                      Ligeramente alta (101–120) – <span class="badge bg-warning">Amarillo</span>
+                    </label>
+                  </div>
+
+                  <div class="form-check mb-2 text-danger">
+                    <input class="form-check-input" type="radio" name="fc" id="fcMuyAlta" value="muy_alta">
+                    <label class="form-check-label" for="fcMuyAlta">
+                      Muy alta (&gt;120) – <span class="badge bg-danger">Rojo</span>
+                    </label>
+                  </div>
+
+                  <div class="form-check mb-2 text-info">
+                    <input class="form-check-input" type="radio" name="fc" id="fcBaja" value="baja">
+                    <label class="form-check-label" for="fcBaja">
+                      Baja (&lt;60) – <span class="badge bg-info">Celeste</span>
+                    </label>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+            <!-- TEMPERATURA -->
+            <div class="col-md-6">
+              <div class="card bg-semitransparent h-100">
+                <div class="card-body">
+                  <h5 class="card-title mb-3">Temperatura (°C)</h5>
+
+                  <div class="form-check mb-2 text-success">
+                    <input class="form-check-input" type="radio" name="temp" id="tempNormal" value="normal">
+                    <label class="form-check-label" for="tempNormal">
+                      Normal (36–37.5) – <span class="badge bg-success">Verde</span>
+                    </label>
+                  </div>
+
+                  <div class="form-check mb-2 text-warning">
+                    <input class="form-check-input" type="radio" name="temp" id="tempFebricula" value="febricula">
+                    <label class="form-check-label" for="tempFebricula">
+                      Febrícula (37.6–38) – <span class="badge bg-warning">Amarillo</span>
+                    </label>
+                  </div>
+
+                  <div class="form-check mb-2 text-danger">
+                    <input class="form-check-input" type="radio" name="temp" id="tempFiebre" value="fiebre">
+                    <label class="form-check-label" for="tempFiebre">
+                      Fiebre (&gt;38) – <span class="badge bg-danger">Rojo</span>
+                    </label>
+                  </div>
+
+                  <div class="form-check mb-2 text-info">
+                    <input class="form-check-input" type="radio" name="temp" id="tempBaja" value="baja">
+                    <label class="form-check-label" for="tempBaja">
+                      Hipotermia (&lt;36) – <span class="badge bg-info">Celeste</span>
+                    </label>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- BOTONES -->
+          <div class="mt-4 d-flex justify-content-end gap-2">
+            <button type="submit" class="btn btn-success btn-sm">Guardar</button>
+            <a href="modulos.html" class="btn btn-secondary btn-sm">Salir</a>
+          </div>
+
+        </fieldset>
+      </form>
+
+    </div>
+  </main>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+  /* ==== UTILIDADES ==== */
+  function setSvMsg(texto, tipo = 'info') {
+    const msg = document.getElementById('sv-msg');
+    msg.classList.remove('text-primary', 'text-danger', 'text-success');
+    if (tipo === 'error') msg.classList.add('text-danger');
+    else if (tipo === 'ok') msg.classList.add('text-success');
+    else msg.classList.add('text-primary');
+    msg.textContent = texto || '';
+  }
+
+  function keyPaciente(tipoId, numId) {
+    return (tipoId || '') + '|' + (numId || '');
+  }
+
+  function getSignos() {
+    const raw = localStorage.getItem('shadt_signos');
+    return raw ? JSON.parse(raw) : {};
+  }
+
+  function saveSignos(signos) {
+    localStorage.setItem('shadt_signos', JSON.stringify(signos));
+  }
+
+  /* ==== CARGA INICIAL ==== */
+  document.addEventListener('DOMContentLoaded', function () {
+    const fieldset = document.getElementById('sv-fieldset');
+
+    const spanTipoId = document.getElementById('sv-tipoid');
+    const inputDoc   = document.getElementById('sv-doc');
+    const inputNom   = document.getElementById('sv-nombre');
+    const inputSexo  = document.getElementById('sv-sexo');
+    const inputFH    = document.getElementById('sv-fecha-hora');
+
+    // 1. Cargar admisión actual
+    const rawAdm = localStorage.getItem('shadt_admision_actual');
+    if (!rawAdm) {
+      setSvMsg('No hay admisión activa. Registre un paciente en el módulo Admisión.', 'error');
+      fieldset.disabled = true;
+      return;
+    }
+
+    const adm = JSON.parse(rawAdm);
+    const tipoId = adm.tipoId || '';
+    const numId  = adm.numId  || '';
+    const nombre = adm.nombre || '';
+
+    // 2. Buscar paciente en shadt_pacientes para obtener sexo y estadoPaciente
+    let sexo = '';
+    let estadoPaciente = 'activo';
+
+    const rawPac = localStorage.getItem('shadt_pacientes');
+    if (rawPac) {
+      try {
+        const pacientes = JSON.parse(rawPac);
+        const p = pacientes[keyPaciente(tipoId, numId)];
+        if (p) {
+          sexo = p.sexo || '';
+          estadoPaciente = p.estadoPaciente || 'activo';
+        }
+      } catch (e) {
+        console.error('Error leyendo shadt_pacientes', e);
+      }
+    }
+
+    // 3. Rellenar controles
+    spanTipoId.textContent = tipoId || 'DOC';
+    inputDoc.value  = numId || '';
+    inputNom.value  = nombre || '';
+    inputSexo.value = sexo || '';
+
+    // Fecha y hora por defecto = ahora
+    const ahora = new Date();
+    const yyyy = ahora.getFullYear();
+    const mm = String(ahora.getMonth() + 1).padStart(2, '0');
+    const dd = String(ahora.getDate()).padStart(2, '0');
+    const hh = String(ahora.getHours()).padStart(2, '0');
+    const mi = String(ahora.getMinutes()).padStart(2, '0');
+    inputFH.value = `${yyyy}-${mm}-${dd}T${hh}:${mi}`;
+
+    // 4. Estado paciente: solo activo puede registrar signos
+    if (estadoPaciente !== 'activo') {
+      fieldset.disabled = true;
+      setSvMsg('El paciente está desactivado. No se pueden registrar signos vitales.', 'error');
+    } else {
+      fieldset.disabled = false;
+      setSvMsg('Paciente activo. Puede registrar signos vitales.', 'ok');
+    }
+  });
+
+  /* ==== GUARDAR SIGNOS ==== */
+  document.getElementById('sv-form').addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    const fieldset = document.getElementById('sv-fieldset');
+    if (fieldset.disabled) {
+      alert('No se pueden guardar signos vitales (paciente no activo o sin admisión).');
+      return;
+    }
+
+    const rawAdm = localStorage.getItem('shadt_admision_actual');
+    if (!rawAdm) {
+      alert('No hay admisión activa.');
+      return;
+    }
+    const adm = JSON.parse(rawAdm);
+    const tipoId = adm.tipoId || '';
+    const numId  = adm.numId  || '';
+    const nombre = adm.nombre || '';
+
+    const inputSexo = document.getElementById('sv-sexo');
+    const fhStr     = document.getElementById('sv-fecha-hora').value;
+
+    const fcChecked   = document.querySelector('input[name="fc"]:checked');
+    const tempChecked = document.querySelector('input[name="temp"]:checked');
+
+    if (!fcChecked) {
+      alert('Seleccione una categoría para la Frecuencia cardíaca.');
+      return;
+    }
+    if (!tempChecked) {
+      alert('Seleccione una categoría para la Temperatura.');
+      return;
+    }
+
+    const fcCategoria   = fcChecked.value;   // normal / ligeramente_alta / muy_alta / baja
+    const tempCategoria = tempChecked.value; // normal / febricula / fiebre / baja
+
+    const signos = getSignos();
+    const key    = keyPaciente(tipoId, numId);
+    if (!signos[key]) signos[key] = [];
+
+    const registro = {
+      tipoId,
+      numId,
+      nombre,
+      sexo: inputSexo.value || '',
+      fechaHora: fhStr || new Date().toISOString(),
+      fcCategoria,
+      tempCategoria
+    };
+
+    signos[key].push(registro);
+    saveSignos(signos);
+    localStorage.setItem('shadt_signos_actual', JSON.stringify(registro));
+
+    setSvMsg('Signos vitales guardados correctamente.', 'ok');
+    alert('Signos vitales guardados (simulación).');
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SHADT - Acostar Paciente</title>
+
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  >
+  <link rel="stylesheet" href="css/styles.css">
+
+  <!-- Estilos específicos para Acostar -->
+  <style>
+    .ac-label-box {
+      background-color: #66FBFF;
+      color: #000;
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 0.8rem;
+      padding: 3px 10px;
+      border-radius: 2px;
+      text-align: center;
+      min-width: 100px;
+      display: inline-block;
+    }
+
+    .ac-input {
+      height: 28px;
+      font-size: 0.9rem;
+      padding: 2px 8px;
+      text-align: center;
+    }
+
+    .ac-radio-label {
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+
+    .ac-icon-btn {
+      background: transparent;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+    }
+
+    .ac-icon {
+      width: 42px;
+      height: auto;
+    }
+
+    .ac-msg {
+      font-size: 0.8rem;
+    }
+  </style>
+</head>
+<body class="app-body">
+
+<div class="d-flex">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar bg-dark text-white">
+    <div class="p-3 text-center border-bottom border-secondary">
+      <div class="shadt-logo-side mb-1">SHADT</div>
+    </div>
+
+    <nav class="nav flex-column p-2 mt-2">
+      <span class="text-uppercase text-muted small mb-2">Módulos</span>
+      <a href="admision.html" class="nav-link text-white">ADMISIÓN</a>
+      <a href="signos_vitales.html" class="nav-link text-white">SIGNOS VITALES</a>
+      <a href="historia_clinica.html" class="nav-link text-white">HISTORIA CLÍNICA</a>
+      <a href="salida.html" class="nav-link text-white">SALIDA</a>
+      <a href="acostar.html" class="nav-link text-white active">ACOSTAR</a>
+      <a href="estadia_alta.html" class="nav-link text-white">ESTADÍA Y ALTA PACIENTE</a>
+      <a href="informes.html" class="nav-link text-white">INFORMES</a>
+    </nav>
+
+    <div class="mt-auto p-3 border-top border-secondary small">
+      <div>Usuario: <strong>Desarrollador</strong></div>
+      <a href="modulos.html" class="text-decoration-none text-light d-block mb-1">
+        Ir a módulos
+      </a>
+      <a href="index.html" class="text-decoration-none text-danger">
+        Cerrar sesión
+      </a>
+    </div>
+  </aside>
+
+  <!-- CONTENIDO -->
+  <main class="flex-grow-1 app-main app-bg-medico">
+    <div class="container py-4">
+
+      <div id="ac-msg" class="ac-msg text-primary mb-2"></div>
+
+      <div class="card bg-semitransparent">
+        <div class="card-body">
+
+          <form id="form-acostar">
+
+            <!-- BUSCAR PACIENTE POR TIPO ID + DOCUMENTO -->
+            <div class="row g-2 align-items-center mb-3">
+              <div class="col-md-3 d-flex justify-content-md-end">
+                <span class="ac-label-box">Buscar paciente</span>
+              </div>
+              <div class="col-md-3">
+                <select id="ac-buscar-tipoid" class="form-select ac-input">
+                  <option value="CC">CC</option>
+                  <option value="TI">TI</option>
+                  <option value="Pasaporte">Pasaporte</option>
+                  <option value="Cedula de Extrangeria">Cedula de Extrangeria</option>
+                  <option value="Tarjeta de Extrangeria">Tarjeta de Extrangeria</option>
+                  <option value="Permiso Especial de Permanencia">Permiso Especial de Permanencia</option>
+                  <option value="Nit">Nit</option>
+                </select>
+              </div>
+              <div class="col-md-3">
+                <input
+                  type="text"
+                  id="ac-buscar-numid"
+                  class="form-control ac-input"
+                  placeholder="Documento"
+                >
+              </div>
+              <div class="col-md-3">
+                <button type="button" id="btn-ac-buscar" class="btn btn-primary btn-sm w-100">
+                  Buscar
+                </button>
+              </div>
+            </div>
+
+            <!-- NOMBRE -->
+            <div class="row g-2 align-items-center mb-3">
+              <div class="col-md-3 d-flex justify-content-md-end">
+                <span class="ac-label-box">Nombre</span>
+              </div>
+              <div class="col-md-6">
+                <input type="text" id="ac-nombre" class="form-control ac-input" placeholder="Nombres" required>
+              </div>
+            </div>
+
+            <!-- TIPO ID + Nº DOCUMENTO -->
+            <div class="row g-2 align-items-center mb-3">
+              <div class="col-md-3 d-flex justify-content-md-end">
+                <span class="ac-label-box">Tipo ID</span>
+              </div>
+              <div class="col-md-3">
+                <select id="ac-tipoid" class="form-select ac-input">
+                  <option>CC</option>
+                  <option>TI</option>
+                  <option>Pasaporte</option>
+                  <option>Cedula de Extrangeria</option>
+                  <option>Tarjeta de Extrangeria</option>
+                  <option>Permiso Especial de Permanencia</option>
+                  <option>Nit</option>
+                </select>
+              </div>
+              <div class="col-md-3">
+                <input type="text" id="ac-numid" class="form-control ac-input" placeholder="0000000" required>
+              </div>
+            </div>
+
+            <!-- TIPO CAMA (informativo) -->
+            <div class="row g-2 align-items-center mb-3">
+              <div class="col-md-3 d-flex justify-content-md-end">
+                <span class="ac-label-box">Tipo cama</span>
+              </div>
+              <div class="col-md-3">
+                <select id="ac-tipocama" class="form-select ac-input">
+                  <option selected>Seleccione</option>
+                  <option>General</option>
+                  <option>UCI</option>
+                  <option>Observación</option>
+                  <option>Maternidad</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- SELECCIÓN DE CAMA DISPONIBLE -->
+            <div class="row g-2 align-items-center mb-4">
+              <div class="col-md-3 d-flex justify-content-md-end">
+                <span class="ac-label-box">Cama</span>
+              </div>
+              <div class="col-md-3">
+                <select id="ac-cama" class="form-select ac-input">
+                  <option value="">Cargando camas...</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- RADIO MENOR / ADULTO / EMBARAZADA -->
+            <div class="row mb-4">
+              <div class="col-md-6 offset-md-3">
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="grupoPaciente" id="pacMenor" value="nino">
+                  <label class="form-check-label ac-radio-label" for="pacMenor">
+                    Menor
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="grupoPaciente" id="pacAdulto" value="adulto">
+                  <label class="form-check-label ac-radio-label" for="pacAdulto">
+                    Adulto
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="grupoPaciente" id="pacEmbarazada" value="embarazada">
+                  <label class="form-check-label ac-radio-label" for="pacEmbarazada">
+                    Embarazada
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <!-- BOTÓN GUARDAR CON ICONO -->
+            <div class="d-flex justify-content-center mt-3">
+              <div class="text-center">
+                <button type="submit" id="btn-guardar-acostar" class="ac-icon-btn" title="Guardar">
+                  <img src="img/icono-guardar.png" alt="Guardar" class="ac-icon">
+                </button>
+              </div>
+            </div>
+
+          </form>
+
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+</div>
+
+<script>
+  /* ===== UTILIDADES ===== */
+  function setAcMsg(texto, tipo = 'info') {
+    const msg = document.getElementById('ac-msg');
+    msg.classList.remove('text-primary', 'text-danger', 'text-success');
+    if (tipo === 'error') msg.classList.add('text-danger');
+    else if (tipo === 'ok') msg.classList.add('text-success');
+    else msg.classList.add('text-primary');
+    msg.textContent = texto || '';
+  }
+
+  function keyPaciente(tipoId, numId) {
+    return (tipoId || '') + '|' + (numId || '');
+  }
+
+  function getPacientes() {
+    const raw = localStorage.getItem('shadt_pacientes');
+    return raw ? JSON.parse(raw) : {};
+  }
+
+  /* ===== CARGA INICIAL (camas + posible paciente hospitalizado) ===== */
+  document.addEventListener('DOMContentLoaded', function () {
+    const selectCama = document.getElementById('ac-cama');
+    const btnGuardar = document.getElementById('btn-guardar-acostar');
+
+    // --- Cargar estado de camas ---
+    const stored = localStorage.getItem('shadt_camas');
+    let beds = stored ? JSON.parse(stored) : {};
+
+    for (let i = 1; i <= 6; i++) {
+      if (!beds[i]) {
+        beds[i] = { type: 'none', patient: null };
+      }
+    }
+
+    selectCama.innerHTML = '';
+    let hayCamasLibres = false;
+
+    for (let i = 1; i <= 6; i++) {
+      if (beds[i].type === 'none') {
+        const opt = document.createElement('option');
+        opt.value = i;
+        opt.textContent = 'Cama ' + i;
+        selectCama.appendChild(opt);
+        hayCamasLibres = true;
+      }
+    }
+
+    if (!hayCamasLibres) {
+      const opt = document.createElement('option');
+      opt.value = '';
+      opt.textContent = 'Sin camas disponibles';
+      selectCama.appendChild(opt);
+      selectCama.disabled = true;
+      btnGuardar.disabled = true;
+      setAcMsg('No hay camas disponibles en este momento.', 'error');
+    } else {
+      setAcMsg('Seleccione un paciente y una cama disponible.', 'info');
+    }
+
+    // --- Si venimos de SALIDA con "hospitalizar", prellenar datos ---
+    const rawHist = localStorage.getItem('shadt_historia_actual');
+    if (rawHist) {
+      try {
+        const h = JSON.parse(rawHist);
+        if (h.decision === 'hospitalizar') {
+          const nombreField = document.getElementById('ac-nombre');
+          const tipoIdField = document.getElementById('ac-tipoid');
+          const numIdField  = document.getElementById('ac-numid');
+
+          if (h.nombre) nombreField.value = h.nombre;
+          if (h.tipoId) tipoIdField.value = h.tipoId;
+          if (h.numId)  numIdField.value  = h.numId;
+
+          setAcMsg('Paciente hospitalizado desde Salida. Asigne una cama.', 'ok');
+        }
+      } catch (e) {
+        console.error('Error leyendo shadt_historia_actual', e);
+      }
+    }
+
+    // Guardamos de nuevo camas inicializadas por si faltaba alguna
+    localStorage.setItem('shadt_camas', JSON.stringify(beds));
+  });
+
+  /* ===== BUSCAR PACIENTE POR TIPO ID + DOCUMENTO ===== */
+  document.getElementById('btn-ac-buscar').addEventListener('click', function () {
+    const tipo = document.getElementById('ac-buscar-tipoid').value;
+    const num  = document.getElementById('ac-buscar-numid').value.trim();
+
+    if (!num) {
+      setAcMsg('Ingrese un número de documento para buscar.', 'error');
+      return;
+    }
+
+    const pacientes = getPacientes();
+    const key = keyPaciente(tipo, num);
+    const p = pacientes[key];
+
+    if (!p) {
+      setAcMsg('Paciente no encontrado en Admisión.', 'error');
+      return;
+    }
+
+    const nombreCompleto =
+      (p.nombres || '') + ' ' + (p.apellido1 || '') + ' ' + (p.apellido2 || '');
+    document.getElementById('ac-nombre').value = nombreCompleto.trim() || '';
+    document.getElementById('ac-tipoid').value = p.tipoId || tipo;
+    document.getElementById('ac-numid').value  = p.numId || num;
+
+    setAcMsg('Paciente encontrado. Ahora seleccione cama y tipo de paciente.', 'ok');
+  });
+
+  /* ===== GUARDAR PACIENTE EN CAMA ===== */
+  document.getElementById('form-acostar').addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    const nombre   = document.getElementById('ac-nombre').value.trim();
+    const tipoId   = document.getElementById('ac-tipoid').value;
+    const numId    = document.getElementById('ac-numid').value.trim();
+    const tipoCama = document.getElementById('ac-tipocama').value;
+    const camaValue= document.getElementById('ac-cama').value;
+
+    if (!nombre || !numId) {
+      alert('Nombre y documento son obligatorios.');
+      return;
+    }
+
+    if (!camaValue) {
+      alert('Seleccione una cama disponible.');
+      return;
+    }
+
+    const radio = document.querySelector('input[name="grupoPaciente"]:checked');
+    if (!radio) {
+      alert('Seleccione si el paciente es Menor, Adulto o Embarazada.');
+      return;
+    }
+    const tipoPaciente = radio.value; // 'adulto' | 'nino' | 'embarazada'
+
+    // Recuperar estado actual de las camas desde localStorage
+    const stored = localStorage.getItem('shadt_camas');
+    let beds = stored ? JSON.parse(stored) : {};
+
+    for (let i = 1; i <= 6; i++) {
+      if (!beds[i]) {
+        beds[i] = { type: 'none', patient: null };
+      }
+    }
+
+    // Verificar si YA tiene cama asignada
+    for (let i = 1; i <= 6; i++) {
+      const b = beds[i];
+      if (
+        b.patient &&
+        b.patient.tipoId === tipoId &&
+        b.patient.numId  === numId
+      ) {
+        alert(
+          'Este paciente ya tiene asignada la Cama ' +
+          i +
+          ' en el módulo Estadía y Alta Paciente. ' +
+          'Primero libere esa cama antes de asignarle otra.'
+        );
+        return;
+      }
+    }
+
+    const camaAsignada = parseInt(camaValue, 10);
+
+    if (!camaAsignada || camaAsignada < 1 || camaAsignada > 6) {
+      alert('Cama seleccionada no válida.');
+      return;
+    }
+
+    // Verificar que la cama seleccionada siga libre
+    if (beds[camaAsignada].type !== 'none') {
+      alert('La cama seleccionada ya no está disponible. Actualice la página.');
+      return;
+    }
+
+    const paciente = {
+      nombre,
+      tipoId,
+      numId,
+      tipoCama,
+      tipoPaciente   // adulto, nino, embarazada
+    };
+
+    beds[camaAsignada] = {
+      type: tipoPaciente,
+      patient: paciente
+    };bbb
+
+    // Guardar camas actualizadas
+    localStorage.setItem('shadt_camas', JSON.stringify(beds));
+
+    // *** CLAVE: borrar la historia actual para que NO se vuelva a precargar en Acostar ***
+    localStorage.removeItem('shadt_historia_actual');
+
+    alert('Paciente acostado en la Cama ' + camaAsignada);
+    window.location.href = 'estadia_alta.html';
+  });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

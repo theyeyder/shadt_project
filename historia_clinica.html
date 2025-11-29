@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SHADT - Historia Clínica</title>
+
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  >
+  <link rel="stylesheet" href="css/styles.css">
+
+  <!-- Estilos específicos para Historia Clínica -->
+  <style>
+    .hc-label-box {
+      background-color:#66FBFF;
+      color: #000;
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 0.8rem;
+      padding: 3px 8px;
+      border-radius: 2px;
+      text-align: center;
+      letter-spacing: 0.5px;
+      min-width: 90px;
+      display: inline-block;
+    }
+
+    .hc-input {
+      height: 28px;
+      font-size: 0.85rem;
+      padding: 2px 8px;
+      text-align: center;
+    }
+
+    .hc-textarea {
+      font-size: 0.9rem;
+      padding: 6px 10px;
+      text-align: center;
+      resize: vertical;
+    }
+
+    .hc-section-title {
+      background-color:#66FBFF;
+      padding: 3px 12px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      border-radius: 2px;
+      display: inline-block;
+    }
+
+    .hc-icon-btn {
+      background: transparent;
+      border: none;
+      padding: 0;
+    }
+
+    .hc-icon {
+      width: 42px;
+      height: auto;
+    }
+
+    .hc-msg {
+      font-size: 0.8rem;
+    }
+
+    .badge-estado-paciente {
+      font-size: 0.75rem;
+    }
+
+    .badge-estado-historia {
+      font-size: 0.75rem;
+    }
+  </style>
+</head>
+<body class="app-body">
+
+<div class="d-flex">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar bg-dark text-white">
+    <div class="p-3 text-center border-bottom border-secondary">
+      <div class="shadt-logo-side mb-1">SHADT</div>
+    </div>
+
+    <nav class="nav flex-column p-2 mt-2">
+      <span class="text-uppercase text-muted small mb-2">Módulos</span>
+      <a href="admision.html" class="nav-link text-white">ADMISIÓN</a>
+      <a href="signos_vitales.html" class="nav-link text-white">SIGNOS VITALES</a>
+      <a href="historia_clinica.html" class="nav-link text-white active">HISTORIA CLÍNICA</a>
+      <a href="salida.html" class="nav-link text-white">SALIDA</a>
+      <a href="acostar.html" class="nav-link text-white">ACOSTAR</a>
+      <a href="estadia_alta.html" class="nav-link text-white">ESTADÍA Y ALTA PACIENTE</a>
+      <a href="informes.html" class="nav-link text-white">INFORMES</a>
+    </nav>
+
+    <div class="mt-auto p-3 border-top border-secondary small">
+      <div>Usuario: <strong>Desarrollador</strong></div>
+      <a href="modulos.html" class="text-decoration-none text-light d-block mb-1">
+        Ir a módulos
+      </a>
+      <a href="index.html" class="text-decoration-none text-danger">
+        Cerrar sesión
+      </a>
+    </div>
+  </aside>
+
+  <!-- CONTENIDO -->
+  <main class="flex-grow-1 app-main app-bg-medico">
+    <div class="container py-4">
+
+      <!-- MENSAJE / ESTADO -->
+      <div id="hc-msg" class="hc-msg text-primary mb-2"></div>
+      <p class="hc-msg mb-2">
+        <strong>Estado historia:</strong>
+        <span id="hc-estado-historia" class="badge badge-estado-historia bg-secondary">Sin historia</span>
+      </p>
+
+      <div class="card bg-semitransparent">
+        <div class="card-body">
+
+          <form id="hc-form">
+            <fieldset id="hc-fieldset">
+              <!-- FILA SUPERIOR: NOMBRE / DIRECCIÓN / CC / EDAD / CIUDAD / FECHA / SEXO -->
+              <div class="row g-2 align-items-center mb-2">
+
+                <!-- Nombre y  Dirección -->
+                <div class="col-md-5">
+                  <div class="d-flex align-items-center gap-2 mb-2">
+                    <span class="hc-label-box">Nombre</span>
+                    <input
+                      type="text"
+                      id="hc-nombre"
+                      class="form-control hc-input flex-grow-1"
+                      placeholder="PACIENTE PRUEBA"
+                    >
+                  </div>
+
+                  <div class="d-flex align-items-center gap-2">
+                    <span class="hc-label-box">Dirección</span>
+                    <input
+                      type="text"
+                      id="hc-direccion"
+                      class="form-control hc-input flex-grow-1"
+                      placeholder="PRUEBA"
+                    >
+                  </div>
+                </div>
+
+                <!-- CC / Edad / Ciudad / Fecha / Sexo / Estado Paciente -->
+                <div class="col-md-7">
+                  <div class="row g-2 mb-2">
+                    <div class="col-md-4 d-flex align-items-center gap-2">
+                      <span id="hc-tipoid-label" class="hc-label-box">CC</span>
+                      <input
+                        type="text"
+                        id="hc-doc"
+                        class="form-control hc-input"
+                        placeholder="12124150"
+                      >
+                    </div>
+                    <div class="col-md-4 d-flex align-items-center gap-2">
+                      <span class="hc-label-box">Edad</span>
+                      <input
+                        type="text"
+                        id="hc-edad"
+                        class="form-control hc-input"
+                        placeholder="47"
+                      >
+                    </div>
+                    <div class="col-md-4 d-flex align-items-center gap-2">
+                      <span class="hc-label-box">Ciudad</span>
+                      <input
+                        type="text"
+                        id="hc-ciudad"
+                        class="form-control hc-input"
+                        placeholder="PRUEBA"
+                      >
+                    </div>
+                  </div>
+
+                  <div class="row g-2 mb-2">
+                    <div class="col-md-6 d-flex align-items-center gap-2">
+                      <span class="hc-label-box">Fecha</span>
+                      <input
+                        type="date"
+                        id="hc-fecha"
+                        class="form-control hc-input"
+                      >
+                    </div>
+                    <div class="col-md-6 d-flex align-items-center gap-2">
+                      <span class="hc-label-box">Sexo</span>
+                      <select id="hc-sexo" class="form-select hc-input">
+                        <option>Sexo</option>
+                        <option>Femenino</option>
+                        <option>Masculino</option>
+                        <option>Otro</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="row g-2">
+                    <div class="col-md-6 d-flex align-items-center gap-2">
+                      <span class="hc-label-box">Estado paciente</span>
+                      <span id="hc-estado-paciente" class="badge badge-estado-paciente bg-secondary w-100">
+                        Sin estado
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+              <hr class="my-3">
+
+              <!-- DIAGNÓSTICO / ENF ACTUAL -->
+              <div class="row g-3 mb-3">
+                <div class="col-md-6">
+                  <div class="mb-1">
+                    <span class="hc-section-title">Diagnóstico</span>
+                  </div>
+                  <textarea
+                    id="hc-diagnostico"
+                    class="form-control hc-textarea"
+                    rows="3"
+                    placeholder="Llenar campo"
+                  ></textarea>
+                </div>
+                <div class="col-md-6">
+                  <div class="mb-1">
+                    <span class="hc-section-title">Enfermedad actual</span>
+                  </div>
+                  <textarea
+                    id="hc-enf-actual"
+                    class="form-control hc-textarea"
+                    rows="3"
+                    placeholder="Llenar campo"
+                  ></textarea>
+                </div>
+              </div>
+
+              <!-- EXÁMENES / PESO - TALLA - COLOR DE PIEL / FÓRMULA -->
+              <div class="row g-3 mb-3">
+                <!-- Exámenes -->
+                <div class="col-md-4">
+                  <div class="mb-1">
+                    <span class="hc-section-title">Exámenes</span>
+                  </div>
+                  <textarea
+                    id="hc-examenes"
+                    class="form-control hc-textarea"
+                    rows="3"
+                    placeholder="Llenar campo"
+                  ></textarea>
+                </div>
+
+                <!-- Peso / Talla / Color de piel -->
+                <div class="col-md-4">
+                  <div class="mb-2 d-flex align-items-center gap-2">
+                    <span class="hc-label-box">Peso</span>
+                    <input
+                      type="text"
+                      id="hc-peso"
+                      class="form-control hc-input"
+                      placeholder="00"
+                    >
+                  </div>
+                  <div class="mb-2 d-flex align-items-center gap-2">
+                    <span class="hc-label-box">Talla</span>
+                    <input
+                      type="text"
+                      id="hc-talla"
+                      class="form-control hc-input"
+                      placeholder="00"
+                    >
+                  </div>
+                  <div class="d-flex align-items-center gap-2">
+                    <span class="hc-label-box">Color de piel</span>
+                    <select id="hc-color-piel" class="form-select hc-input">
+                      <option>Color de piel</option>
+                      <option>Clara</option>
+                      <option>Trigueña</option>
+                      <option>Oscura</option>
+                    </select>
+                  </div>
+                </div>
+
+                <!-- Fórmula -->
+                <div class="col-md-4">
+                  <div class="mb-1">
+                    <span class="hc-section-title">Fórmula</span>
+                  </div>
+                  <textarea
+                    id="hc-formula"
+                    class="form-control hc-textarea"
+                    rows="3"
+                    placeholder="Llenar campo"
+                  ></textarea>
+                </div>
+              </div>
+
+              <!-- TRATAMIENTO -->
+              <div class="row g-3 mb-3">
+                <div class="col-md-6">
+                  <div class="mb-1">
+                    <span class="hc-section-title">Tratamiento</span>
+                  </div>
+                  <textarea
+                    id="hc-tratamiento"
+                    class="form-control hc-textarea"
+                    rows="3"
+                    placeholder="Llenar campo"
+                  ></textarea>
+                </div>
+              </div>
+
+              <!-- BOTONES CON IMÁGENES (Guardar / Eliminar / Imprimir) -->
+              <div class="d-flex justify-content-center gap-4 mt-3">
+                <!-- Guardar (icono verde) -->
+                <button type="submit" class="hc-icon-btn" title="Guardar">
+                  <img src="img/icono-guardar.png" alt="Guardar" class="hc-icon">
+                </button>
+
+                <!-- Eliminar (icono rojo) -->
+                <button type="button" class="hc-icon-btn" title="Eliminar" id="hc-btn-eliminar">
+                  <img src="img/icon-eliminar.png" alt="Eliminar" class="hc-icon">
+                </button>
+
+                <!-- Imprimir (icono impresora) -->
+                <button type="button" class="hc-icon-btn" title="Imprimir" id="hc-btn-imprimir">
+                  <img src="img/icon-imprimir.png" alt="Imprimir" class="hc-icon">
+                </button>
+              </div>
+
+            </fieldset>
+          </form>
+
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+  /* ====== UTILIDADES ====== */
+  function setHcMsg(texto, tipo = 'info') {
+    const msg = document.getElementById('hc-msg');
+    msg.classList.remove('text-primary', 'text-danger', 'text-success');
+    if (tipo === 'error') msg.classList.add('text-danger');
+    else if (tipo === 'ok') msg.classList.add('text-success');
+    else msg.classList.add('text-primary');
+    msg.textContent = texto || '';
+  }
+
+  function updateEstadoPacienteBadge(estado) {
+    const badge = document.getElementById('hc-estado-paciente');
+    badge.className = 'badge badge-estado-paciente bg-secondary w-100';
+
+    if (!estado) {
+      badge.textContent = 'Sin estado';
+      return;
+    }
+
+    if (estado === 'activo') {
+      badge.textContent = 'ACTIVO';
+      badge.classList.remove('bg-secondary');
+      badge.classList.add('bg-success');
+    } else if (estado === 'desactivado') {
+      badge.textContent = 'DESACTIVADO';
+      badge.classList.remove('bg-secondary');
+      badge.classList.add('bg-warning');
+    } else if (estado === 'desactivado_doc') {
+      badge.textContent = 'DESACTIVADO POR DOCUMENTO';
+      badge.classList.remove('bg-secondary');
+      badge.classList.add('bg-danger');
+    } else {
+      badge.textContent = estado.toUpperCase();
+    }
+  }
+
+  function updateEstadoHistoriaBadge(estado) {
+    const badge = document.getElementById('hc-estado-historia');
+    badge.className = 'badge badge-estado-historia bg-secondary';
+
+    if (!estado) {
+      badge.textContent = 'Sin historia';
+      return;
+    }
+
+    if (estado === 'abierta') {
+      badge.textContent = 'ABIERTA';
+      badge.classList.remove('bg-secondary');
+      badge.classList.add('bg-success');
+    } else if (estado === 'cerrada') {
+      badge.textContent = 'CERRADA';
+      badge.classList.remove('bg-secondary');
+      badge.classList.add('bg-danger');
+    } else {
+      badge.textContent = estado.toUpperCase();
+    }
+  }
+
+  function calcularEdad(fechaNacStr) {
+    if (!fechaNacStr) return '';
+    const fn = new Date(fechaNacStr);
+    if (isNaN(fn.getTime())) return '';
+    const hoy = new Date();
+    let edad = hoy.getFullYear() - fn.getFullYear();
+    const m = hoy.getMonth() - fn.getMonth();
+    if (m < 0 || (m === 0 && hoy.getDate() < fn.getDate())) {
+      edad--;
+    }
+    return edad >= 0 ? String(edad) : '';
+  }
+
+  function keyPaciente(tipoId, numId) {
+    return (tipoId || '') + '|' + (numId || '');
+  }
+
+  function getHistorias() {
+    const raw = localStorage.getItem('shadt_historias');
+    return raw ? JSON.parse(raw) : {};
+  }
+
+  function saveHistorias(historias) {
+    localStorage.setItem('shadt_historias', JSON.stringify(historias));
+  }
+
+  /* ====== CARGA INICIAL ====== */
+  document.addEventListener('DOMContentLoaded', function () {
+    const fieldset = document.getElementById('hc-fieldset');
+
+    const inputNombre   = document.getElementById('hc-nombre');
+    const inputDir      = document.getElementById('hc-direccion');
+    const spanTipoId    = document.getElementById('hc-tipoid-label');
+    const inputDoc      = document.getElementById('hc-doc');
+    const inputEdad     = document.getElementById('hc-edad');
+    const inputCiudad   = document.getElementById('hc-ciudad');
+    const inputFecha    = document.getElementById('hc-fecha');
+    const selectSexo    = document.getElementById('hc-sexo');
+
+    // 1. Cargar admisión actual
+    const rawAdm = localStorage.getItem('shadt_admision_actual');
+    if (!rawAdm) {
+      setHcMsg('No hay admisión activa. Registre un paciente en el módulo Admisión.', 'error');
+      fieldset.disabled = true;
+      return;
+    }
+
+    const adm = JSON.parse(rawAdm);
+
+    const tipoId = adm.tipoId || '';
+    const numId  = adm.numId || '';
+    const nombreAdm = adm.nombre || '';
+
+    // 2. Cargar datos del paciente desde shadt_pacientes
+    let direccion = '';
+    let fechaNac  = '';
+    let sexo      = '';
+    let ciudad    = '';
+    let estadoPaciente = 'activo';
+
+    const rawPac = localStorage.getItem('shadt_pacientes');
+    if (rawPac) {
+      try {
+        const pacientes = JSON.parse(rawPac);
+        const key = keyPaciente(tipoId, numId);
+        const p = pacientes[key];
+        if (p) {
+          direccion      = p.direccion       || '';
+          fechaNac       = p.fechaNac        || '';
+          sexo           = p.sexo            || '';
+          ciudad         = p.ciudad          || '';
+          estadoPaciente = p.estadoPaciente  || 'activo';
+        }
+      } catch (e) {
+        console.error('Error leyendo shadt_pacientes', e);
+      }
+    }
+
+    // 3. Cargar historia previa (si existe)
+    const historias = getHistorias();
+    const hKey = keyPaciente(tipoId, numId);
+    const h = historias[hKey] || null;
+
+    // 4. Rellenar campos de cabecera
+    inputNombre.value = nombreAdm || '';
+    inputDir.value    = direccion || '';
+    spanTipoId.textContent = tipoId || 'DOC';
+    inputDoc.value    = numId || '';
+    inputEdad.value   = calcularEdad(fechaNac);
+    inputCiudad.value = ciudad || '';
+
+    // Fecha por defecto: hoy
+    const hoy = new Date();
+    const yyyy = hoy.getFullYear();
+    const mm = String(hoy.getMonth() + 1).padStart(2, '0');
+    const dd = String(hoy.getDate()).padStart(2, '0');
+    inputFecha.value = `${yyyy}-${mm}-${dd}`;
+
+    // Sexo
+    if (sexo === 'Femenino' || sexo === 'Masculino' || sexo === 'Otro') {
+      selectSexo.value = sexo;
+    } else {
+      selectSexo.value = 'Sexo';
+    }
+
+    // Estado paciente
+    updateEstadoPacienteBadge(estadoPaciente);
+
+    // Campos de historia previa
+    if (h) {
+      document.getElementById('hc-diagnostico').value = h.diagnostico   || '';
+      document.getElementById('hc-enf-actual').value = h.enfActual     || '';
+      document.getElementById('hc-examenes').value   = h.examenes      || '';
+      document.getElementById('hc-peso').value       = h.peso          || '';
+      document.getElementById('hc-talla').value      = h.talla         || '';
+      document.getElementById('hc-color-piel').value = h.colorPiel     || 'Color de piel';
+      document.getElementById('hc-formula').value    = h.formula       || '';
+      document.getElementById('hc-tratamiento').value= h.tratamiento   || '';
+      updateEstadoHistoriaBadge(h.estado || 'abierta');
+      setHcMsg('Historia cargada (' + (h.estado || 'abierta') + ').', 'ok');
+    } else {
+      updateEstadoHistoriaBadge(null);
+      setHcMsg('Paciente activo. Puede diligenciar la historia clínica (sin historia previa).', 'ok');
+    }
+
+    if (estadoPaciente !== 'activo') {
+      fieldset.disabled = true;
+      setHcMsg('El paciente está desactivado. No se puede diligenciar la historia clínica.', 'error');
+    } else {
+      if (!h || h.estado === 'abierta') {
+        fieldset.disabled = false;
+      } else {
+        // historia cerrada → solo lectura
+        fieldset.disabled = true;
+        setHcMsg('La historia está CERRADA. Solo lectura.', 'error');
+      }
+    }
+  });
+
+  // Guardar Historia Clínica (REAL, se guarda en shadt_historias)
+  document.getElementById('hc-form').addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    const fieldset = document.getElementById('hc-fieldset');
+    if (fieldset.disabled) {
+      alert('No se puede guardar historia clínica (paciente desactivado o historia cerrada).');
+      return;
+    }
+
+    const rawAdm = localStorage.getItem('shadt_admision_actual');
+    if (!rawAdm) {
+      alert('No hay admisión activa para asociar la historia clínica.');
+      return;
+    }
+    const adm = JSON.parse(rawAdm);
+    const tipoId = adm.tipoId || '';
+    const numId  = adm.numId  || '';
+    const key    = keyPaciente(tipoId, numId);
+
+    const historias = getHistorias();
+    const anterior  = historias[key] || {};
+
+    const historiaObj = {
+      ...anterior,
+      tipoId,
+      numId,
+      nombre: document.getElementById('hc-nombre').value.trim(),
+      direccion: document.getElementById('hc-direccion').value.trim(),
+      ciudad: document.getElementById('hc-ciudad').value.trim(),
+      sexo: document.getElementById('hc-sexo').value,
+      diagnostico: document.getElementById('hc-diagnostico').value.trim(),
+      enfActual:   document.getElementById('hc-enf-actual').value.trim(),
+      examenes:    document.getElementById('hc-examenes').value.trim(),
+      peso:        document.getElementById('hc-peso').value.trim(),
+      talla:       document.getElementById('hc-talla').value.trim(),
+      colorPiel:   document.getElementById('hc-color-piel').value,
+      formula:     document.getElementById('hc-formula').value.trim(),
+      tratamiento: document.getElementById('hc-tratamiento').value.trim(),
+      fechaUltMod: new Date().toLocaleString()
+    };
+
+    // Si no tenía estado, la dejamos abierta por defecto.
+    if (!historiaObj.estado) {
+      historiaObj.estado = 'abierta';
+    }
+
+    historias[key] = historiaObj;
+    saveHistorias(historias);
+    localStorage.setItem('shadt_historia_actual', JSON.stringify(historiaObj));
+
+    updateEstadoHistoriaBadge(historiaObj.estado);
+    setHcMsg('Historia clínica guardada (estado: ' + historiaObj.estado.toUpperCase() + ').', 'ok');
+    alert('Historia clínica guardada (simulación).');
+  });
+
+  document.getElementById('hc-btn-eliminar').addEventListener('click', function () {
+    alert('Eliminar historia clínica (simulación).');
+  });
+
+  document.getElementById('hc-btn-imprimir').addEventListener('click', function () {
+    window.print();
+  });
+</script>
+
+</body>
+</html>

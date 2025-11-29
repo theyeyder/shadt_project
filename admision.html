@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SHADT - Admisión</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+
+  <!-- Estilos específicos para el módulo de Admisión -->
+  <style>
+    .adm-label-box {
+      background-color: #7FE6F3;
+      color: #000;
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 0.8rem;
+      padding: 4px 10px;
+      border-radius: 2px;
+      text-align: left;
+      letter-spacing: 0.5px;
+    }
+
+    .adm-form-control {
+      height: 30px;
+      font-size: 0.9rem;
+      text-align: center;
+      padding: 2px 8px;
+    }
+
+    .adm-title {
+      background-color: #7FE6F3;
+      display: inline-block;
+      padding: 4px 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-radius: 2px;
+      margin-bottom: 12px;
+    }
+
+    .adm-actions-card {
+      background-color: rgba(255, 255, 255, 0.9);
+      padding: 10px 14px;
+      border-radius: 6px;
+      font-size: 0.9rem;
+    }
+
+    .adm-msg {
+      font-size: 0.8rem;
+    }
+
+    .adm-action-icon-btn {
+      background: transparent;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+    }
+
+    .adm-action-icon {
+      width: 40px;
+      height: auto;
+    }
+
+    .adm-action-label {
+      font-size: 0.8rem;
+    }
+
+    .badge-estado {
+      font-size: 0.75rem;
+    }
+  </style>
+</head>
+
+<body class="app-body">
+
+  <div class="d-flex">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar bg-dark text-white">
+      <div class="p-3 text-center border-bottom border-secondary">
+        <div class="shadt-logo-side mb-1">SHADT</div>
+      </div>
+
+      <nav class="nav flex-column p-2 mt-2">
+        <span class="text-uppercase text-muted small mb-2">Módulos</span>
+        <a href="admision.html" class="nav-link text-white active">ADMISIÓN</a>
+        <a href="signos_vitales.html" class="nav-link text-white">SIGNOS VITALES</a>
+        <a href="historia_clinica.html" class="nav-link text-white">HISTORIA CLÍNICA</a>
+        <a href="salida.html" class="nav-link text-white">SALIDA</a>
+        <a href="acostar.html" class="nav-link text-white">ACOSTAR</a>
+        <a href="estadia_alta.html" class="nav-link text-white">ESTADÍA Y ALTA PACIENTE</a>
+        <a href="informes.html" class="nav-link text-white">INFORMES</a>
+      </nav>
+
+      <div class="mt-auto p-3 border-top border-secondary small">
+        <div>Usuario: <strong>Desarrollador</strong></div>
+        <a href="modulos.html" class="text-decoration-none text-light d-block mb-1">
+          Ir a módulos
+        </a>
+        <a href="index.html" class="text-decoration-none text-danger">
+          Cerrar sesión
+        </a>
+      </div>
+    </aside>
+
+    <!-- CONTENIDO -->
+    <main class="flex-grow-1 app-main app-bg-medico">
+      <div class="container py-4">
+
+        <div class="row g-3">
+          <!-- Columna principal de datos -->
+          <div class="col-lg-8">
+            <div class="card bg-semitransparent">
+              <div class="card-body">
+
+                <!-- Título tipo prototipo -->
+                <span class="adm-title">DATOS DE INGRESOS</span>
+
+                <!-- MENSAJE / ESTADO -->
+                <div id="adm-msg" class="adm-msg text-primary mb-2"></div>
+
+                <!-- BUSCAR PACIENTE -->
+                <div class="row g-2 align-items-center mb-3">
+                  <div class="col-12 col-md-3">
+                    <div class="adm-label-box">Buscar paciente</div>
+                  </div>
+                  <div class="col-4 col-md-3">
+                    <select id="buscar-tipoid" class="form-select adm-form-control">
+                      <option value="CC">CC</option>
+                      <option value="TI">TI</option>
+                      <option value="Pasaporte">Pasaporte</option>
+                      <option value="Cedula de Extrangeria">Cedula de Extrangeria</option>
+                      <option value="Tarjeta de Extrangeria">Tarjeta de Extrangeria</option>
+                      <option value="Permiso Especial de Permanencia">Permiso Especial de Permanencia</option>
+                      <option value="Nit">Nit</option>
+                    </select>
+                  </div>
+                  <div class="col-4 col-md-3">
+                    <input type="text" id="buscar-numid" class="form-control adm-form-control" placeholder="Documento">
+                  </div>
+                  <div class="col-4 col-md-3">
+                    <button type="button" id="btn-buscar" class="btn btn-primary btn-sm w-100">
+                      Buscar
+                    </button>
+                  </div>
+                </div>
+
+                <form id="form-admision">
+                  <!-- Nombres -->
+                  <div class="row g-2 align-items-center mb-2">
+                    <div class="col-4 col-md-3">
+                      <div class="adm-label-box">Nombres</div>
+                    </div>
+                    <div class="col-8 col-md-9">
+                      <input type="text" id="adm-nombres" class="form-control adm-form-control" placeholder="nombres paciente">
+                    </div>
+                  </div>
+
+                  <!-- Tipo Identificacion  Número ID -->
+                  <div class="row g-2 align-items-center mb-2">
+                    <div class="col-4 col-md-3">
+                      <div class="adm-label-box">Tipo ID</div>
+                    </div>
+                    <div class="col-8 col-md-9">
+                      <select id="adm-tipoid" class="form-select adm-form-control">
+                        <option>CC</option>
+                        <option>TI</option>
+                        <option>Pasaporte</option>
+                        <option>Cedula de Extrangeria</option>
+                        <option>Tarjeta de Extrangeria</option>
+                        <option>Permiso Especial de Permanencia</option>
+                        <option>Nit</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="row g-2 align-items-center mb-2">
+                    <div class="col-4 col-md-3">
+                      <!-- vacío o "Número ID" si quieres -->
+                    </div>
+                    <div class="col-8 col-md-9">
+                      <input type="text" id="adm-numid" class="form-control adm-form-control" placeholder="0000000">
+                    </div>
+                  </div>
+
+                  <!-- Tipo de eps prestadora de servicio -->
+                  <div class="row g-2 align-items-center mb-2">
+                    <div class="col-4 col-md-3">
+                      <div class="adm-label-box">Tipo EPS</div>
+                    </div>
+                    <div class="col-8 col-md-9">
+                      <select id="adm-tipoeps" class="form-select adm-form-control">
+                        <option>Aliansalud EPS</option>
+                        <option>Asmet Salud</option>
+                        <option>Comfaoriente</option>
+                        <option>Comfenalco Valle</option>
+                        <option>Compensar EPS</option>
+                        <option>Coosalud Régimen Contributivo</option>
+                        <option>Coosalud Régimen Subsidiada</option>
+                        <option>Coosalud EPS-S</option>
+                        <option>Dusakawi EPSI</option>
+                        <option>Emssanar E.S.S.</option>
+                        <option>EPS Familiar De Colombia</option>
+                        <option>EPS Sanitas</option>
+                        <option>EPS Sura</option>
+                        <option>Famisanar</option>
+                        <option>Mutual SER</option>
+                        <option>Nueva EPS (actualmente bajo control estatal)</option>
+                        <option>Salud Total EPS S.A.</option>
+                        <option>Servicio Occidental De Salud EPS (SOS)</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <!-- 1er Apellido -->
+                  <div class="row g-2 align-items-center mb-2">
+                    <div class="col-4 col-md-3">
+                      <div class="adm-label-box">1 Apellido</div>
+                    </div>
+                    <div class="col-8 col-md-9">
+                      <input type="text" id="adm-ap1" class="form-control adm-form-control" placeholder="escribe apellido">
+                    </div>
+                  </div>
+
+                  <!-- 2do Apellido -->
+                  <div class="row g-2 align-items-center mb-2">
+                    <div class="col-4 col-md-3">
+                      <div class="adm-label-box">2 Apellido</div>
+                    </div>
+                    <div class="col-8 col-md-9">
+                      <input type="text" id="adm-ap2" class="form-control adm-form-control" placeholder="escribe apellido">
+                    </div>
+                  </div>
+
+                  <!-- Ciudad -->
+                  <div class="row g-2 align-items-center mb-2">
+                    <div class="col-4 col-md-3">
+                      <div class="adm-label-box">Ciudad</div>
+                    </div>
+                    <div class="col-8 col-md-9">
+                      <input type="text" id="adm-ciudad" class="form-control adm-form-control" placeholder="ciudad">
+                    </div>
+                  </div>
+
+                  <!-- Dirección -->
+                  <div class="row g-2 align-items-center mb-2">
+                    <div class="col-4 col-md-3">
+                      <div class="adm-label-box">Dirección</div>
+                    </div>
+                    <div class="col-8 col-md-9">
+                      <input type="text" id="adm-direccion" class="form-control adm-form-control" placeholder="dirección">
+                    </div>
+                  </div>
+
+                  <!-- Fecha nacimiento -->
+                  <div class="row g-2 align-items-center mb-2">
+                    <div class="col-4 col-md-3">
+                      <div class="adm-label-box text-uppercase">Fecha nacimiento</div>
+                    </div>
+                    <div class="col-8 col-md-9">
+                      <input type="date" id="adm-fechanac" class="form-control adm-form-control">
+                    </div>
+                  </div>
+
+                  <!-- Síntomas -->
+                  <div class="row g-2 align-items-center mb-2">
+                    <div class="col-4 col-md-3">
+                      <div class="adm-label-box">Síntomas</div>
+                    </div>
+                    <div class="col-8 col-md-9">
+                      <input type="text" id="adm-sintomas" class="form-control adm-form-control" placeholder="síntomas">
+                    </div>
+                  </div>
+
+                  <!-- Alérgico -->
+                  <div class="row g-2 align-items-center mb-2">
+                    <div class="col-4 col-md-3">
+                      <div class="adm-label-box">Alérgico</div>
+                    </div>
+                    <div class="col-8 col-md-9">
+                      <div class="d-flex align-items-center gap-3">
+                        <div class="form-check">
+                          <input class="form-check-input" type="radio" name="alergico" id="alergicoSi" value="si">
+                          <label class="form-check-label" for="alergicoSi">Sí</label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input" type="radio" name="alergico" id="alergicoNo" value="no">
+                          <label class="form-check-label" for="alergicoNo">No</label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Acompañante -->
+                  <div class="row g-2 align-items-center mb-2">
+                    <div class="col-4 col-md-3">
+                      <div class="adm-label-box">Acompañante</div>
+                    </div>
+                    <div class="col-8 col-md-9">
+                      <input type="text" id="adm-acompanante" class="form-control adm-form-control" placeholder="nombres de acompañante">
+                    </div>
+                  </div>
+
+                  <!-- Sexo -->
+                  <div class="row g-2 align-items-center mt-3">
+                    <div class="col-4 col-md-3">
+                      <div class="adm-label-box text-center w-100">Sexo</div>
+                    </div>
+                    <div class="col-8 col-md-9">
+                      <select id="adm-sexo" class="form-select adm-form-control">
+                        <option selected>Selecione</option>
+                        <option>Femenino</option>
+                        <option>Masculino</option>
+                        <option>Otro</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <!-- Botones inferiores -->
+                  <div class="mt-4 d-flex justify-content-end gap-2">
+                    <button type="submit" class="btn btn-success btn-sm">Guardar</button>
+                    <a href="modulos.html" class="btn btn-secondary btn-sm">Salir</a>
+                  </div>
+
+                </form>
+              </div>
+            </div>
+          </div>
+
+          <!--Acciones Barra lateral derecha superior-->
+          <div class="col-lg-4">
+            <div class="adm-actions-card">
+              <p class="mb-1">
+                <strong>Estado admisión:</strong>
+                <span id="adm-estado-span" class="badge bg-secondary badge-estado">Sin admisión</span>
+              </p>
+
+              <p class="mb-2">
+                <strong>Estado del paciente:</strong>
+                <select id="pac-estado" class="form-select form-select-sm mt-1">
+                  <option value="activo">Activo</option>
+                  <option value="desactivado">Desactivado</option>
+                  <option value="desactivado_doc">Desactivado por documento</option>
+                </select>
+              </p>
+
+              <hr class="my-2">
+
+              <div class="d-flex justify-content-around text-center">
+                <!-- BOTÓN ANULAR -->
+                <div id="div-anular">
+                  <button type="button" id="btn-anular" class="adm-action-icon-btn" title="Anular admisión">
+                    <img src="img/icon-anular.png" class="adm-action-icon" alt="Anular">
+                  </button>
+                  <div class="adm-action-label">Anular</div>
+                </div>
+
+                <!-- BOTÓN REVERTIR -->
+                <div id="div-revertir" style="display:none;">
+                  <button type="button" id="btn-revertir" class="adm-action-icon-btn" title="Revertir admisión">
+                    <img src="img/icon-revertir.png" class="adm-action-icon" alt="Revertir">
+                  </button>
+                  <div class="adm-action-label">Revertir</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    // ---- Utilidades ----
+    function getPacientes() {
+      const raw = localStorage.getItem('shadt_pacientes');
+      return raw ? JSON.parse(raw) : {};
+    }
+
+    function savePacientes(pacientes) {
+      localStorage.setItem('shadt_pacientes', JSON.stringify(pacientes));
+    }
+
+    function getAdmisiones() {
+      const raw = localStorage.getItem('shadt_admisiones');
+      return raw ? JSON.parse(raw) : {};
+    }
+
+    function saveAdmisiones(admisiones) {
+      localStorage.setItem('shadt_admisiones', JSON.stringify(admisiones));
+    }
+
+    function keyPaciente(tipoId, numId) {
+      return (tipoId || '') + '|' + (numId || '');
+    }
+
+    function setMsg(texto, tipo = 'info') {
+      const msg = document.getElementById('adm-msg');
+      msg.classList.remove('text-primary', 'text-danger', 'text-success');
+      if (tipo === 'error') msg.classList.add('text-danger');
+      else if (tipo === 'ok') msg.classList.add('text-success');
+      else msg.classList.add('text-primary');
+      msg.textContent = texto || '';
+    }
+
+    function limpiarFormulario() {
+      document.getElementById('adm-nombres').value = '';
+      document.getElementById('adm-ap1').value = '';
+      document.getElementById('adm-ap2').value = '';
+      document.getElementById('adm-ciudad').value = '';
+      document.getElementById('adm-direccion').value = '';
+      document.getElementById('adm-fechanac').value = '';
+      document.getElementById('adm-sintomas').value = '';
+      document.getElementById('adm-acompanante').value = '';
+      document.getElementById('adm-tipoeps').selectedIndex = 0;
+      document.getElementById('adm-sexo').selectedIndex = 0;
+      document.getElementById('pac-estado').value = 'activo';
+
+      const alergicoSi = document.getElementById('alergicoSi');
+      const alergicoNo = document.getElementById('alergicoNo');
+      if (alergicoSi) alergicoSi.checked = false;
+      if (alergicoNo) alergicoNo.checked = false;
+    }
+
+    function updateEstadoUI(estado) {
+      const estadoSpan = document.getElementById('adm-estado-span');
+      const divAnular = document.getElementById('div-anular');
+      const divRevertir = document.getElementById('div-revertir');
+
+      if (!estado) {
+        estadoSpan.textContent = 'Sin admisión';
+        estadoSpan.className = 'badge bg-secondary badge-estado';
+        divAnular.style.display = 'inline-block';
+        divRevertir.style.display = 'none';
+        return;
+      }
+
+      if (estado === 'anulada') {
+        estadoSpan.textContent = 'ANULADA';
+        estadoSpan.className = 'badge bg-danger badge-estado';
+        divAnular.style.display = 'none';
+        divRevertir.style.display = 'inline-block';
+      } else {
+        estadoSpan.textContent = 'ACTIVA';
+        estadoSpan.className = 'badge bg-success badge-estado';
+        divAnular.style.display = 'inline-block';
+        divRevertir.style.display = 'none';
+      }
+    }
+
+    let admCurrentKey = null;
+
+    document.addEventListener('DOMContentLoaded', function () {
+      const btnBuscar = document.getElementById('btn-buscar');
+      const formAdm = document.getElementById('form-admision');
+      const btnAnular = document.getElementById('btn-anular');
+      const btnRevertir = document.getElementById('btn-revertir');
+
+      // Cargar estado inicial si hay admisión actual
+      const rawAdmActual = localStorage.getItem('shadt_admision_actual');
+      if (rawAdmActual) {
+        const adm = JSON.parse(rawAdmActual);
+        admCurrentKey = keyPaciente(adm.tipoId, adm.numId);
+        updateEstadoUI(adm.estado || 'activa');
+      }
+
+      // ---- BUSCAR PACIENTE ----
+      btnBuscar.addEventListener('click', function () {
+        const tipo = document.getElementById('buscar-tipoid').value;
+        const num = document.getElementById('buscar-numid').value.trim();
+
+        if (!num) {
+          setMsg('Ingrese un número de documento para buscar.', 'error');
+          return;
+        }
+
+        const pacientes = getPacientes();
+        const admisiones = getAdmisiones();
+        const key = keyPaciente(tipo, num);
+        admCurrentKey = key;
+
+        const p = pacientes[key];
+        const adm = admisiones[key];
+
+        if (p) {
+          // Rellenar formulario con datos guardados
+          document.getElementById('adm-nombres').value = p.nombres || '';
+          document.getElementById('adm-tipoid').value = p.tipoId || 'CC';
+          document.getElementById('adm-numid').value = p.numId || '';
+          document.getElementById('adm-tipoeps').value = p.tipoEps || 'Aliansalud EPS';
+          document.getElementById('adm-ap1').value = p.apellido1 || '';
+          document.getElementById('adm-ap2').value = p.apellido2 || '';
+          document.getElementById('adm-ciudad').value = p.ciudad || '';
+          document.getElementById('adm-direccion').value = p.direccion || '';
+          document.getElementById('adm-fechanac').value = p.fechaNac || '';
+          document.getElementById('adm-sintomas').value = p.sintomas || '';
+          document.getElementById('adm-acompanante').value = p.acompanante || '';
+          document.getElementById('adm-sexo').value = p.sexo || 'Selecione';
+          document.getElementById('pac-estado').value = p.estadoPaciente || 'activo';
+
+          const alergicoSi = document.getElementById('alergicoSi');
+          const alergicoNo = document.getElementById('alergicoNo');
+          if (p.alergico === 'si') {
+            alergicoSi.checked = true;
+          } else if (p.alergico === 'no') {
+            alergicoNo.checked = true;
+          } else {
+            if (alergicoSi) alergicoSi.checked = false;
+            if (alergicoNo) alergicoNo.checked = false;
+          }
+
+          if (adm) {
+            updateEstadoUI(adm.estado || 'activa');
+            setMsg('Paciente encontrado. Última admisión: ' + (adm.estado || 'activa') + '.', 'ok');
+            localStorage.setItem('shadt_admision_actual', JSON.stringify(adm));
+          } else {
+            updateEstadoUI(null);
+            setMsg('Paciente encontrado, pero sin admisión registrada.', 'info');
+          }
+
+        } else {
+          // No existe -> limpiar, pero dejamos tipo y número que buscó
+          limpiarFormulario();
+          document.getElementById('adm-tipoid').value = tipo;
+          document.getElementById('adm-numid').value = num;
+          updateEstadoUI(null);
+          setMsg('Paciente no existe. Diligencie los datos para registrarlo.', 'info');
+        }
+      });
+
+      // ---- GUARDAR ADMISIÓN ----
+      formAdm.addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const nombres = document.getElementById('adm-nombres').value.trim();
+        const tipoId = document.getElementById('adm-tipoid').value;
+        const numId = document.getElementById('adm-numid').value.trim();
+        const tipoEps = document.getElementById('adm-tipoeps').value;
+        const apellido1 = document.getElementById('adm-ap1').value.trim();
+        const apellido2 = document.getElementById('adm-ap2').value.trim();
+        const ciudad = document.getElementById('adm-ciudad').value.trim();
+        const direccion = document.getElementById('adm-direccion').value.trim();
+        const fechaNac = document.getElementById('adm-fechanac').value;
+        const sintomas = document.getElementById('adm-sintomas').value.trim();
+        const acompanante = document.getElementById('adm-acompanante').value.trim();
+        const sexo = document.getElementById('adm-sexo').value;
+        const estadoPaciente = document.getElementById('pac-estado').value;
+
+        let alergico = null;
+        const alergicoSi = document.getElementById('alergicoSi');
+        const alergicoNo = document.getElementById('alergicoNo');
+        if (alergicoSi && alergicoSi.checked) alergico = 'si';
+        if (alergicoNo && alergicoNo.checked) alergico = 'no';
+
+        if (!nombres || !numId) {
+          setMsg('Nombres y número de documento son obligatorios.', 'error');
+          return;
+        }
+
+        const pacientes = getPacientes();
+        const key = keyPaciente(tipoId, numId);
+        admCurrentKey = key;
+
+        pacientes[key] = {
+          nombres,
+          tipoId,
+          numId,
+          tipoEps,
+          apellido1,
+          apellido2,
+          ciudad,
+          direccion,
+          fechaNac,
+          sintomas,
+          acompanante,
+          sexo,
+          alergico,
+          estadoPaciente
+        };
+
+        savePacientes(pacientes);
+
+        const ahora = new Date();
+        const admisionActual = {
+          nombre: (nombres + ' ' + apellido1 + ' ' + apellido2).trim(),
+          tipoId,
+          numId,
+          fecha: ahora.toLocaleDateString(),
+          hora: ahora.toLocaleTimeString(),
+          sintomas,
+          estado: 'activa'
+        };
+
+        const admisiones = getAdmisiones();
+        admisiones[key] = admisionActual;
+        saveAdmisiones(admisiones);
+
+        localStorage.setItem('shadt_admision_actual', JSON.stringify(admisionActual));
+
+        updateEstadoUI('activa');
+        setMsg('Admisión guardada correctamente (estado: ACTIVA).', 'ok');
+      });
+
+      // ---- BOTÓN ANULAR ----
+      btnAnular.addEventListener('click', function () {
+        if (!admCurrentKey) {
+          setMsg('Debe buscar o guardar una admisión antes de anular.', 'error');
+          return;
+        }
+
+        const admisiones = getAdmisiones();
+        const adm = admisiones[admCurrentKey];
+
+        if (!adm) {
+          setMsg('No hay admisión registrada para este paciente.', 'error');
+          return;
+        }
+
+        adm.estado = 'anulada';
+        admisiones[admCurrentKey] = adm;
+        saveAdmisiones(admisiones);
+        localStorage.setItem('shadt_admision_actual', JSON.stringify(adm));
+
+        updateEstadoUI('anulada');
+        setMsg('Admisión ANULADA.', 'ok');
+      });
+
+      // ---- BOTÓN REVERTIR ----
+      btnRevertir.addEventListener('click', function () {
+        if (!admCurrentKey) {
+          setMsg('Debe buscar una admisión anulada para revertir.', 'error');
+          return;
+        }
+
+        const admisiones = getAdmisiones();
+        const adm = admisiones[admCurrentKey];
+
+        if (!adm) {
+          setMsg('No hay admisión registrada para este paciente.', 'error');
+          return;
+        }
+
+        if (adm.estado !== 'anulada') {
+          setMsg('La admisión actual no está anulada.', 'error');
+          return;
+        }
+
+        adm.estado = 'activa';
+        admisiones[admCurrentKey] = adm;
+        saveAdmisiones(admisiones);
+        localStorage.setItem('shadt_admision_actual', JSON.stringify(adm));
+
+        updateEstadoUI('activa');
+        setMsg('Admisión revertida a ACTIVA.', 'ok');
+      });
+
+    });
+  </script>
+</body>
+
+</html>
