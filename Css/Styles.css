@@ -1,0 +1,151 @@
+/* Tipografía general */
+body {
+  font-family: Arial, sans-serif;
+}
+
+/* ============ LOGIN ============ */
+
+.login-body {
+  background: url("../img/fondo-login.jpg") center/cover no-repeat fixed;
+  min-height: 100vh;
+}
+
+.login-overlay {
+  background: rgba(0, 0, 0, 0.4);
+  min-height: 100vh;
+
+  /* ✔ Centra el login realmente al medio */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  /* ✔ Agrega un padding para que no quede tan pegado arriba */
+  padding-top: 40px;
+  padding-bottom: 40px;
+}
+
+
+.login-card {
+  background-color: #ffffffee;
+  border-radius: 12px;
+
+  /* ✔ Limita el ancho total */
+  max-width: 500px;
+
+  /* ✔ Añade espacio interno y mejor centro visual */
+  padding: 10px;
+}
+
+
+.shadt-logo {
+  color: #00AEEF;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.link-cambiar-pass {
+  color: #40B4A6;
+  text-decoration: underline;
+}
+
+/* ============ APP LAYOUT (MÓDULOS) ============ */
+
+.app-body {
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: 250px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar .nav-link {
+  padding: 0.45rem 0.75rem;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+.sidebar .nav-link.active,
+.sidebar .nav-link:hover {
+  background-color: #0d6efd;
+}
+
+.shadt-logo-side {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #00AEEF;
+  letter-spacing: 2px;
+}
+
+/* Fondo general de módulos */
+.app-main {
+  background-color: #BFE6F0;
+}
+
+
+/* Fondo principal */
+
+.app-bg-medico {
+  background: url("../img/fondo-principal.jpg") center/cover no-repeat fixed;
+}
+
+
+/* Tarjetas semitransparentes sobre imagen */
+.bg-semitransparent {
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+/* Tarjetas de módulos en pantalla principal */
+.card-module {
+  border: none;
+  border-radius: 0.75rem;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+.card-module:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+.icon-module {
+  max-width: 80px;
+}
+
+/* Pantalla principal modulos */
+.modulos-main {
+  background: url("../img/fondo-modulos.jpg") center/cover no-repeat fixed;
+  min-height: 100vh;
+}
+
+/* Texto usuario abajo izq en pantalla principal */
+.user-badge {
+  position: fixed;
+  left: 20px;
+  bottom: 15px;
+  background: rgba(255,255,255,0.9);
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+}
+
+/* Ajustes responsivos */
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    z-index: 10;
+    width: 220px;
+    transform: translateX(-100%);
+    transition: transform 0.2s ease;
+  }
+
+  .sidebar.show {
+    transform: translateX(0);
+  }
+
+  .app-main {
+    margin-left: 0;
+  }
+}
