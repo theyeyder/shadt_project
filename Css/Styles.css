@@ -12,6 +12,7 @@ body {
 
 .login-overlay {
   background: rgba(0, 0, 0, 0.4);
+ 
   min-height: 100vh;
 
   /* ✔ Centra el login realmente al medio */
@@ -24,7 +25,6 @@ body {
   padding-bottom: 40px;
 }
 
-
 .login-card {
   background-color: #ffffffee;
   border-radius: 12px;
@@ -35,7 +35,6 @@ body {
   /* ✔ Añade espacio interno y mejor centro visual */
   padding: 10px;
 }
-
 
 .shadt-logo {
   color: #00AEEF;
@@ -84,13 +83,10 @@ body {
   background-color: #BFE6F0;
 }
 
-
 /* Fondo principal */
-
 .app-bg-medico {
   background: url("../img/fondo-principal.jpg") center/cover no-repeat fixed;
 }
-
 
 /* Tarjetas semitransparentes sobre imagen */
 .bg-semitransparent {
@@ -107,7 +103,8 @@ body {
 
 .card-module:hover {
   transform: translateY(-4px);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  
+ /* box-shadow: 0 8px 20px rgba(0,0,0,0.15);*/
 }
 
 .icon-module {
@@ -131,8 +128,28 @@ body {
   font-size: 0.9rem;
 }
 
-/* Ajustes responsivos */
+/* ================== AJUSTES RESPONSIVOS ================== */
+
+/* Vista tablet y móvil (hasta 768px) */
 @media (max-width: 768px) {
+
+  /* ---- LOGIN ---- */
+  .login-body {
+    /* Quitar el fixed para evitar scroll raro en móviles */
+    background: url("../img/fondo-login.jpg") center/cover no-repeat;
+  }
+
+  .login-overlay {
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+
+  .login-card {
+    max-width: 100%;
+    margin: 0 15px;
+  }
+
+  /* ---- SIDEBAR OCULTABLE (si luego le pones botón) ---- */
   .sidebar {
     position: fixed;
     z-index: 10;
@@ -147,5 +164,91 @@ body {
 
   .app-main {
     margin-left: 0;
+  }
+
+  /* ---- MÓDULOS (pantalla principal) ---- */
+  .modulos-main {
+    flex-direction: column;      /* Logo arriba, módulos abajo */
+    padding: 20px 10px;
+  }
+
+  /* Columna izquierda (texto CONFIGURACIÓN Y MÓDULOS) */
+  .modulos-main > div:first-child {
+    width: 100% !important;      /* Ignora el style="width: 30%;" */
+    padding: 20px 15px !important;
+    align-items: center !important;
+    text-align: center;
+  }
+
+  .modulos-main > div:first-child h3 {
+    text-align: center;
+  }
+
+  /* Contenedor de la grilla de módulos */
+  .modulos-main > div:nth-child(2) {
+    width: 100%;
+    padding: 10px 10px;
+  }
+
+  .icon-module {
+    max-width: 60px;
+  }
+
+  /* El badge de usuario más pequeño en móvil */
+  .user-badge {
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    text-align: center;
+    font-size: 0.8rem;
+    padding: 4px 10px;
+  }
+}
+
+/* Vista muy pequeña (teléfonos chicos, hasta 576px) */
+@media (max-width: 576px) {
+
+  .login-card {
+    padding: 8px;
+  }
+
+  .icon-module {
+    max-width: 50px;
+  }
+
+  .card-module {
+    padding: 0.75rem;
+  }
+
+  .sidebar {
+    width: 200px;
+  }
+
+  .user-badge {
+    font-size: 0.75rem;
+  }
+}
+
+/* ===== Botón para abrir/cerrar sidebar en móvil ===== */
+.sidebar-toggle-btn {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  z-index: 20;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}
+
+/* Ocultar el botón en escritorio */
+@media (min-width: 769px) {
+  .sidebar-toggle-btn {
+    display: none;
   }
 }

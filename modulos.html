@@ -13,14 +13,16 @@
 </head>
 <body>
 
-  <main class="modulos-main d-flex">
+  <!-- En móvil: columnas apiladas (flex-column)
+       En pantallas grandes: lado a lado (flex-lg-row) -->
+  <main class="modulos-main d-flex flex-column flex-lg-row">
     <!-- Columna izquierda: texto CONFIGURACIÓN Y MÓDULOS -->
-    <div class="d-flex flex-column justify-content-center align-items-start px-5" style="width: 30%;">
-      <div class="mb-4">
+    <div class="d-flex flex-column justify-content-center align-items-center align-items-lg-start px-4 px-lg-5 mb-4 mb-lg-0">
+      <div class="mb-4 text-center text-lg-start">
         <img src="img/logo-shadt.png" alt="SHADT" style="max-height:70px;">
       </div>
-      <h3 class="fw-bold mb-1">CONFIGURACIÓN Y</h3>
-      <h3 class="fw-bold mb-4">MÓDULOS</h3>
+     <!-- <h3 class="fw-bold mb-1 text-center text-lg-start">CONFIGURACIÓN -</h3>-->
+      <h3 class="fw-bold mb-4 text-center text-lg-start">MÓDULOS</h3>
     </div>
 
     <!-- Columna derecha: grilla de módulos -->
@@ -48,7 +50,7 @@
             </a>
           </div>
 
-          <!-- ESTADÍA Y ALTA PACIENTE (antes decía CAMAS) -->
+          <!-- ESTADÍA Y ALTA PACIENTE -->
           <div class="col-6 col-md-4 col-lg-3 text-center">
             <a href="estadia_alta.html" class="text-decoration-none text-dark">
               <div class="card-module p-3">
@@ -98,16 +100,48 @@
             </a>
           </div>
 
+          <!-- CONFIGURACIÓN (NUEVO MÓDULO) -->
+          <div class="col-6 col-md-4 col-lg-3 text-center">
+            <a href="configuracion.html" class="text-decoration-none text-dark">
+              <div class="card-module p-3">
+                <!-- Aquí usamos el archivo configuracion.png como dijiste -->
+                <img src="img/configuracion.png" class="icon-module mb-2" alt="Configuración">
+                <div class="fw-bold">CONFIGURACIÓN</div>
+              </div>
+            </a>
+          </div>
+
         </div>
       </div>
     </div>
 
-    <!-- User: Desarrollador abajo a la izquierda -->
+    <!-- User dinámico abajo a la izquierda -->
     <div class="user-badge">
-      User: Desarrollador
+      User: <span id="shadt-username">Desarrollador</span>
     </div>
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- SCRIPT PARA MOSTRAR EL USUARIO SEGÚN EL LOGIN -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const spanUser = document.getElementById('shadt-username');
+      if (!spanUser) return;
+
+      try {
+        const raw = localStorage.getItem('shadt_user');
+        if (!raw) return;
+
+        const user = JSON.parse(raw);
+
+        if (user && user.nombre) {
+          spanUser.textContent = user.nombre;
+        }
+      } catch (e) {
+        console.error('Error leyendo shadt_user', e);
+      }
+    });
+  </script>
 </body>
 </html>

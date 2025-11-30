@@ -92,6 +92,16 @@
 </head>
 <body class="app-body">
 
+<!-- BOTÓN MENU LATERAL (solo móvil) -->
+<button
+  id="sidebarToggle"
+  type="button"
+  class="btn btn-primary d-md-none sidebar-toggle-btn"
+  aria-label="Abrir menú"
+>
+  ☰
+</button>
+
 <div class="d-flex">
 
   <!-- SIDEBAR -->
@@ -112,7 +122,7 @@
     </nav>
 
     <div class="mt-auto p-3 border-top border-secondary small">
-      <div>Usuario: <strong>Desarrollador</strong></div>
+      <div>Usuario: <strong id="shadt-username">Desarrollador</strong></div>
       <a href="modulos.html" class="text-decoration-none text-light d-block mb-1">
         Ir a módulos
       </a>
@@ -343,9 +353,6 @@
     const blob = new Blob([contenido], { type: 'text/csv;charset=utf-8;' });
     const url  = URL.createObjectURL(blob);
 
-    const a = document.createElement('a');
-    a.href = url;
-
     const pref = tipoInforme.replace(/\s+/g, '_').toLowerCase();
     const hoy  = new Date().toISOString().slice(0, 10);
 
@@ -354,6 +361,9 @@
     } else {
       a.download = pref + '_' + hoy + '.csv';
     }
+
+    const a = document.createElement('a');
+    a.href = url;
 
     document.body.appendChild(a);
     a.click();
@@ -531,6 +541,33 @@
     document.getElementById('fechaFinal').value   = hoyStr;
 
     setInfMsg('Seleccione el tipo de informe, el rango de fechas (opcional), el formato y presione "Generar".');
+
+    // Mostrar usuario en la sidebar
+    const spanUser = document.getElementById('shadt-username');
+    if (spanUser) {
+      try {
+        const raw = localStorage.getItem('shadt_user');
+        if (raw) {
+          const user = JSON.parse(raw);
+          if (user && user.nombre) {
+            spanUser.textContent = user.nombre;
+          }
+        }
+      } catch (e) {
+        console.error('Error leyendo shadt_user', e);
+      }
+    }
+
+    // Toggle de sidebar en móvil
+    const btnToggle = document.getElementById('sidebarToggle');
+    if (btnToggle) {
+      btnToggle.addEventListener('click', function () {
+        const sidebar = document.querySelector('.sidebar');
+        if (sidebar) {
+          sidebar.classList.toggle('show');
+        }
+      });
+    }
   });
 </script>
 

@@ -77,6 +77,16 @@
 </head>
 <body class="app-body">
 
+<!-- BOTÓN MENU LATERAL (solo móvil) -->
+<button
+  id="sidebarToggle"
+  type="button"
+  class="btn btn-primary d-md-none sidebar-toggle-btn"
+  aria-label="Abrir menú"
+>
+  ☰
+</button>
+
 <div class="d-flex">
 
   <!-- SIDEBAR -->
@@ -97,7 +107,7 @@
     </nav>
 
     <div class="mt-auto p-3 border-top border-secondary small">
-      <div>Usuario: <strong>Desarrollador</strong></div>
+      <div>Usuario: <strong id="shadt-username">Desarrollador</strong></div>
       <a href="modulos.html" class="text-decoration-none text-light d-block mb-1">
         Ir a módulos
       </a>
@@ -543,9 +553,36 @@
         setHcMsg('La historia está CERRADA. Solo lectura.', 'error');
       }
     }
+
+    // Mostrar usuario en sidebar
+    const spanUser = document.getElementById('shadt-username');
+    if (spanUser) {
+      try {
+        const raw = localStorage.getItem('shadt_user');
+        if (raw) {
+          const user = JSON.parse(raw);
+          if (user && user.nombre) {
+            spanUser.textContent = user.nombre;
+          }
+        }
+      } catch (e) {
+        console.error('Error leyendo shadt_user', e);
+      }
+    }
+
+    // Toggle de sidebar en móvil
+    const btnToggle = document.getElementById('sidebarToggle');
+    if (btnToggle) {
+      btnToggle.addEventListener('click', function () {
+        const sidebar = document.querySelector('.sidebar');
+        if (sidebar) {
+          sidebar.classList.toggle('show');
+        }
+      });
+    }
   });
 
-  // Guardar Historia Clínica (REAL, se guarda en shadt_historias)
+  // Guardar Historia Clínica
   document.getElementById('hc-form').addEventListener('submit', function (e) {
     e.preventDefault();
 

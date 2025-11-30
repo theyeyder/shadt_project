@@ -76,6 +76,16 @@
 
 <body class="app-body">
 
+  <!-- BOTÓN MENU LATERAL (solo móvil, oculto en escritorio con d-md-none) -->
+  <button
+    id="sidebarToggle"
+    type="button"
+    class="btn btn-primary d-md-none sidebar-toggle-btn"
+    aria-label="Abrir menú"
+  >
+    ☰
+  </button>
+
   <div class="d-flex">
 
     <!-- SIDEBAR -->
@@ -96,7 +106,7 @@
       </nav>
 
       <div class="mt-auto p-3 border-top border-secondary small">
-        <div>Usuario: <strong>Desarrollador</strong></div>
+        <div>Usuario: <strong id="shadt-username">Desarrollador</strong></div>
         <a href="modulos.html" class="text-decoration-none text-light d-block mb-1">
           Ir a módulos
         </a>
@@ -374,8 +384,6 @@
     </main>
 
   </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
   <script>
     // ---- Utilidades ----
@@ -663,6 +671,40 @@
 
     });
   </script>
+
+  <!-- SCRIPT PARA MOSTRAR EL USUARIO EN LA SIDEBAR Y MANEJAR EL TOGGLE DE MENÚ -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      // Mostrar usuario
+      const spanUser = document.getElementById('shadt-username');
+      if (spanUser) {
+        try {
+          const raw = localStorage.getItem('shadt_user');
+          if (raw) {
+            const user = JSON.parse(raw);
+            if (user && user.nombre) {
+              spanUser.textContent = user.nombre;
+            }
+          }
+        } catch (e) {
+          console.error('Error leyendo shadt_user', e);
+        }
+      }
+
+      // Toggle de sidebar en móvil
+      const btnToggle = document.getElementById('sidebarToggle');
+      if (btnToggle) {
+        btnToggle.addEventListener('click', function () {
+          const sidebar = document.querySelector('.sidebar');
+          if (sidebar) {
+            sidebar.classList.toggle('show');
+          }
+        });
+      }
+    });
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

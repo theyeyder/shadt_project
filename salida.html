@@ -78,6 +78,14 @@
       font-size: 0.95rem;
       font-weight: 600;
     }
+
+    /* Botón hamburguesa en móvil */
+    .sidebar-toggle-btn {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      z-index: 20;
+    }
   </style>
 </head>
 <body class="app-body">
@@ -85,7 +93,7 @@
 <div class="d-flex">
 
   <!-- SIDEBAR -->
-  <aside class="sidebar bg-dark text-white">
+  <aside id="sidebar" class="sidebar bg-dark text-white">
     <div class="p-3 text-center border-bottom border-secondary">
       <div class="shadt-logo-side mb-1">SHADT</div>
     </div>
@@ -102,7 +110,7 @@
     </nav>
 
     <div class="mt-auto p-3 border-top border-secondary small">
-      <div>Usuario: <strong>Desarrollador</strong></div>
+      <div>Usuario: <strong id="shadt-username">Desarrollador</strong></div>
       <a href="modulos.html" class="text-decoration-none text-light d-block mb-1">
         Ir a módulos
       </a>
@@ -115,6 +123,16 @@
   <!-- CONTENIDO -->
   <main class="flex-grow-1 app-main app-bg-medico">
     <div class="container py-4">
+
+      <!-- BOTÓN HAMBURGUESA SOLO EN MÓVIL -->
+      <button
+        class="btn btn-outline-light d-lg-none sidebar-toggle-btn"
+        type="button"
+        id="sidebarToggle"
+        aria-label="Abrir menú"
+      >
+        ☰
+      </button>
 
       <!-- MENSAJE / ESTADO -->
       <div id="sal-msg" class="hc-msg text-primary mb-2"></div>
@@ -647,6 +665,45 @@
 
   document.getElementById('sal-btn-imprimir').addEventListener('click', function () {
     window.print();
+  });
+</script>
+
+<!-- SCRIPT PARA MOSTRAR EL USUARIO EN LA SIDEBAR Y MANEJAR EL TOGGLE -->
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const spanUser = document.getElementById('shadt-username');
+    if (spanUser) {
+      try {
+        const raw = localStorage.getItem('shadt_user');
+        if (raw) {
+          const user = JSON.parse(raw);
+          if (user && user.nombre) {
+            spanUser.textContent = user.nombre;
+          }
+        }
+      } catch (e) {
+        console.error('Error leyendo shadt_user', e);
+      }
+    }
+
+    // Lógica del botón hamburguesa (móvil)
+    const sidebar = document.getElementById('sidebar');
+    const toggleBtn = document.getElementById('sidebarToggle');
+    if (sidebar && toggleBtn) {
+      toggleBtn.addEventListener('click', function () {
+        sidebar.classList.toggle('show');
+      });
+
+      // Cerrar sidebar al hacer clic en un enlace, solo en móvil
+      const links = sidebar.querySelectorAll('.nav-link');
+      links.forEach(link => {
+        link.addEventListener('click', function () {
+          if (window.innerWidth <= 768) {
+            sidebar.classList.remove('show');
+          }
+        });
+      });
+    }
   });
 </script>
 

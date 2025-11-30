@@ -54,6 +54,16 @@
 </head>
 <body class="app-body">
 
+<!-- BOTÓN MENU LATERAL (solo móvil) -->
+<button
+  id="sidebarToggle"
+  type="button"
+  class="btn btn-primary d-md-none sidebar-toggle-btn"
+  aria-label="Abrir menú"
+>
+  ☰
+</button>
+
 <div class="d-flex">
 
   <!-- SIDEBAR -->
@@ -74,7 +84,7 @@
     </nav>
 
     <div class="mt-auto p-3 border-top border-secondary small">
-      <div>Usuario: <strong>Desarrollador</strong></div>
+      <div>Usuario: <strong id="shadt-username">Desarrollador</strong></div>
       <a href="modulos.html" class="text-decoration-none text-light d-block mb-1">
         Ir a módulos
       </a>
@@ -133,7 +143,6 @@
                     <img id="bed-img-6" src="img/cama-azul-vacia.png" class="bed-img" alt="Cama 6">
                     <div class="bed-name mt-1">Cama 6</div>
                   </div>
-    
                 </div>
               </div>
             </div>
@@ -193,7 +202,9 @@
   function actualizarCama(id) {
     const bed = beds[id];
     const img = document.getElementById('bed-img-' + id);
-    img.src = bedImages[bed.type] || bedImages.none;
+    if (img) {
+      img.src = bedImages[bed.type] || bedImages.none;
+    }
   }
 
   function selectBed(id) {
@@ -247,8 +258,38 @@
     localStorage.setItem('shadt_camas', JSON.stringify(beds));
   }
 
-  // Inicializar al cargar
-  initBeds();
+  // INICIALIZACIÓN GENERAL
+  document.addEventListener('DOMContentLoaded', function () {
+    // Inicializar camas
+    initBeds();
+
+    // Mostrar usuario en sidebar
+    const spanUser = document.getElementById('shadt-username');
+    if (spanUser) {
+      try {
+        const raw = localStorage.getItem('shadt_user');
+        if (raw) {
+          const user = JSON.parse(raw);
+          if (user && user.nombre) {
+            spanUser.textContent = user.nombre;
+          }
+        }
+      } catch (e) {
+        console.error('Error leyendo shadt_user', e);
+      }
+    }
+
+    // Toggle de sidebar en móvil
+    const btnToggle = document.getElementById('sidebarToggle');
+    if (btnToggle) {
+      btnToggle.addEventListener('click', function () {
+        const sidebar = document.querySelector('.sidebar');
+        if (sidebar) {
+          sidebar.classList.toggle('show');
+        }
+      });
+    }
+  });
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

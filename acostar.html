@@ -57,179 +57,191 @@
 </head>
 <body class="app-body">
 
-<div class="d-flex">
+  <!-- BOTÓN MENU LATERAL (solo móvil, la clase d-md-none la oculta en escritorio) -->
+  <button
+    id="sidebarToggle"
+    type="button"
+    class="btn btn-primary d-md-none sidebar-toggle-btn"
+    aria-label="Abrir menú"
+  >
+    ☰
+  </button>
 
-  <!-- SIDEBAR -->
-  <aside class="sidebar bg-dark text-white">
-    <div class="p-3 text-center border-bottom border-secondary">
-      <div class="shadt-logo-side mb-1">SHADT</div>
-    </div>
+  <div class="d-flex">
 
-    <nav class="nav flex-column p-2 mt-2">
-      <span class="text-uppercase text-muted small mb-2">Módulos</span>
-      <a href="admision.html" class="nav-link text-white">ADMISIÓN</a>
-      <a href="signos_vitales.html" class="nav-link text-white">SIGNOS VITALES</a>
-      <a href="historia_clinica.html" class="nav-link text-white">HISTORIA CLÍNICA</a>
-      <a href="salida.html" class="nav-link text-white">SALIDA</a>
-      <a href="acostar.html" class="nav-link text-white active">ACOSTAR</a>
-      <a href="estadia_alta.html" class="nav-link text-white">ESTADÍA Y ALTA PACIENTE</a>
-      <a href="informes.html" class="nav-link text-white">INFORMES</a>
-    </nav>
-
-    <div class="mt-auto p-3 border-top border-secondary small">
-      <div>Usuario: <strong>Desarrollador</strong></div>
-      <a href="modulos.html" class="text-decoration-none text-light d-block mb-1">
-        Ir a módulos
-      </a>
-      <a href="index.html" class="text-decoration-none text-danger">
-        Cerrar sesión
-      </a>
-    </div>
-  </aside>
-
-  <!-- CONTENIDO -->
-  <main class="flex-grow-1 app-main app-bg-medico">
-    <div class="container py-4">
-
-      <div id="ac-msg" class="ac-msg text-primary mb-2"></div>
-
-      <div class="card bg-semitransparent">
-        <div class="card-body">
-
-          <form id="form-acostar">
-
-            <!-- BUSCAR PACIENTE POR TIPO ID + DOCUMENTO -->
-            <div class="row g-2 align-items-center mb-3">
-              <div class="col-md-3 d-flex justify-content-md-end">
-                <span class="ac-label-box">Buscar paciente</span>
-              </div>
-              <div class="col-md-3">
-                <select id="ac-buscar-tipoid" class="form-select ac-input">
-                  <option value="CC">CC</option>
-                  <option value="TI">TI</option>
-                  <option value="Pasaporte">Pasaporte</option>
-                  <option value="Cedula de Extrangeria">Cedula de Extrangeria</option>
-                  <option value="Tarjeta de Extrangeria">Tarjeta de Extrangeria</option>
-                  <option value="Permiso Especial de Permanencia">Permiso Especial de Permanencia</option>
-                  <option value="Nit">Nit</option>
-                </select>
-              </div>
-              <div class="col-md-3">
-                <input
-                  type="text"
-                  id="ac-buscar-numid"
-                  class="form-control ac-input"
-                  placeholder="Documento"
-                >
-              </div>
-              <div class="col-md-3">
-                <button type="button" id="btn-ac-buscar" class="btn btn-primary btn-sm w-100">
-                  Buscar
-                </button>
-              </div>
-            </div>
-
-            <!-- NOMBRE -->
-            <div class="row g-2 align-items-center mb-3">
-              <div class="col-md-3 d-flex justify-content-md-end">
-                <span class="ac-label-box">Nombre</span>
-              </div>
-              <div class="col-md-6">
-                <input type="text" id="ac-nombre" class="form-control ac-input" placeholder="Nombres" required>
-              </div>
-            </div>
-
-            <!-- TIPO ID + Nº DOCUMENTO -->
-            <div class="row g-2 align-items-center mb-3">
-              <div class="col-md-3 d-flex justify-content-md-end">
-                <span class="ac-label-box">Tipo ID</span>
-              </div>
-              <div class="col-md-3">
-                <select id="ac-tipoid" class="form-select ac-input">
-                  <option>CC</option>
-                  <option>TI</option>
-                  <option>Pasaporte</option>
-                  <option>Cedula de Extrangeria</option>
-                  <option>Tarjeta de Extrangeria</option>
-                  <option>Permiso Especial de Permanencia</option>
-                  <option>Nit</option>
-                </select>
-              </div>
-              <div class="col-md-3">
-                <input type="text" id="ac-numid" class="form-control ac-input" placeholder="0000000" required>
-              </div>
-            </div>
-
-            <!-- TIPO CAMA (informativo) -->
-            <div class="row g-2 align-items-center mb-3">
-              <div class="col-md-3 d-flex justify-content-md-end">
-                <span class="ac-label-box">Tipo cama</span>
-              </div>
-              <div class="col-md-3">
-                <select id="ac-tipocama" class="form-select ac-input">
-                  <option selected>Seleccione</option>
-                  <option>General</option>
-                  <option>UCI</option>
-                  <option>Observación</option>
-                  <option>Maternidad</option>
-                </select>
-              </div>
-            </div>
-
-            <!-- SELECCIÓN DE CAMA DISPONIBLE -->
-            <div class="row g-2 align-items-center mb-4">
-              <div class="col-md-3 d-flex justify-content-md-end">
-                <span class="ac-label-box">Cama</span>
-              </div>
-              <div class="col-md-3">
-                <select id="ac-cama" class="form-select ac-input">
-                  <option value="">Cargando camas...</option>
-                </select>
-              </div>
-            </div>
-
-            <!-- RADIO MENOR / ADULTO / EMBARAZADA -->
-            <div class="row mb-4">
-              <div class="col-md-6 offset-md-3">
-                <div class="form-check">
-                  <input class="form-check-input" type="radio" name="grupoPaciente" id="pacMenor" value="nino">
-                  <label class="form-check-label ac-radio-label" for="pacMenor">
-                    Menor
-                  </label>
-                </div>
-                <div class="form-check">
-                  <input class="form-check-input" type="radio" name="grupoPaciente" id="pacAdulto" value="adulto">
-                  <label class="form-check-label ac-radio-label" for="pacAdulto">
-                    Adulto
-                  </label>
-                </div>
-                <div class="form-check">
-                  <input class="form-check-input" type="radio" name="grupoPaciente" id="pacEmbarazada" value="embarazada">
-                  <label class="form-check-label ac-radio-label" for="pacEmbarazada">
-                    Embarazada
-                  </label>
-                </div>
-              </div>
-            </div>
-
-            <!-- BOTÓN GUARDAR CON ICONO -->
-            <div class="d-flex justify-content-center mt-3">
-              <div class="text-center">
-                <button type="submit" id="btn-guardar-acostar" class="ac-icon-btn" title="Guardar">
-                  <img src="img/icono-guardar.png" alt="Guardar" class="ac-icon">
-                </button>
-              </div>
-            </div>
-
-          </form>
-
-        </div>
+    <!-- SIDEBAR -->
+    <aside class="sidebar bg-dark text-white">
+      <div class="p-3 text-center border-bottom border-secondary">
+        <div class="shadt-logo-side mb-1">SHADT</div>
       </div>
 
-    </div>
-  </main>
+      <nav class="nav flex-column p-2 mt-2">
+        <span class="text-uppercase text-muted small mb-2">Módulos</span>
+        <a href="admision.html" class="nav-link text-white">ADMISIÓN</a>
+        <a href="signos_vitales.html" class="nav-link text-white">SIGNOS VITALES</a>
+        <a href="historia_clinica.html" class="nav-link text-white">HISTORIA CLÍNICA</a>
+        <a href="salida.html" class="nav-link text-white">SALIDA</a>
+        <a href="acostar.html" class="nav-link text-white active">ACOSTAR</a>
+        <a href="estadia_alta.html" class="nav-link text-white">ESTADÍA Y ALTA PACIENTE</a>
+        <a href="informes.html" class="nav-link text-white">INFORMES</a>
+      </nav>
 
-</div>
+      <div class="mt-auto p-3 border-top border-secondary small">
+        <!-- Visualizar usuario en la parte inferior -->
+        <div>Usuario: <strong id="shadt-username">Desarrollador</strong></div>
+
+        <a href="modulos.html" class="text-decoration-none text-light d-block mb-1">
+          Ir a módulos
+        </a>
+        <a href="index.html" class="text-decoration-none text-danger">
+          Cerrar sesión
+        </a>
+      </div>
+    </aside>
+
+    <!-- CONTENIDO -->
+    <main class="flex-grow-1 app-main app-bg-medico">
+      <div class="container py-4">
+
+        <div id="ac-msg" class="ac-msg text-primary mb-2"></div>
+
+        <div class="card bg-semitransparent">
+          <div class="card-body">
+
+            <form id="form-acostar">
+
+              <!-- BUSCAR PACIENTE POR TIPO ID + DOCUMENTO -->
+              <div class="row g-2 align-items-center mb-3">
+                <div class="col-md-3 d-flex justify-content-md-end">
+                  <span class="ac-label-box">Buscar paciente</span>
+                </div>
+                <div class="col-md-3">
+                  <select id="ac-buscar-tipoid" class="form-select ac-input">
+                    <option value="CC">CC</option>
+                    <option value="TI">TI</option>
+                    <option value="Pasaporte">Pasaporte</option>
+                    <option value="Cedula de Extrangeria">Cedula de Extrangeria</option>
+                    <option value="Tarjeta de Extrangeria">Tarjeta de Extrangeria</option>
+                    <option value="Permiso Especial de Permanencia">Permiso Especial de Permanencia</option>
+                    <option value="Nit">Nit</option>
+                  </select>
+                </div>
+                <div class="col-md-3">
+                  <input
+                    type="text"
+                    id="ac-buscar-numid"
+                    class="form-control ac-input"
+                    placeholder="Documento"
+                  >
+                </div>
+                <div class="col-md-3">
+                  <button type="button" id="btn-ac-buscar" class="btn btn-primary btn-sm w-100">
+                    Buscar
+                  </button>
+                </div>
+              </div>
+
+              <!-- NOMBRE -->
+              <div class="row g-2 align-items-center mb-3">
+                <div class="col-md-3 d-flex justify-content-md-end">
+                  <span class="ac-label-box">Nombre</span>
+                </div>
+                <div class="col-md-6">
+                  <input type="text" id="ac-nombre" class="form-control ac-input" placeholder="Nombres" required>
+                </div>
+              </div>
+
+              <!-- TIPO ID + Nº DOCUMENTO -->
+              <div class="row g-2 align-items-center mb-3">
+                <div class="col-md-3 d-flex justify-content-md-end">
+                  <span class="ac-label-box">Tipo ID</span>
+                </div>
+                <div class="col-md-3">
+                  <select id="ac-tipoid" class="form-select ac-input">
+                    <option>CC</option>
+                    <option>TI</option>
+                    <option>Pasaporte</option>
+                    <option>Cedula de Extrangeria</option>
+                    <option>Tarjeta de Extrangeria</option>
+                    <option>Permiso Especial de Permanencia</option>
+                    <option>Nit</option>
+                  </select>
+                </div>
+                <div class="col-md-3">
+                  <input type="text" id="ac-numid" class="form-control ac-input" placeholder="0000000" required>
+                </div>
+              </div>
+
+              <!-- TIPO CAMA (informativo) -->
+              <div class="row g-2 align-items-center mb-3">
+                <div class="col-md-3 d-flex justify-content-md-end">
+                  <span class="ac-label-box">Tipo cama</span>
+                </div>
+                <div class="col-md-3">
+                  <select id="ac-tipocama" class="form-select ac-input">
+                    <option selected>Seleccione</option>
+                    <option>General</option>
+                    <option>UCI</option>
+                    <option>Observación</option>
+                    <option>Maternidad</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- SELECCIÓN DE CAMA DISPONIBLE -->
+              <div class="row g-2 align-items-center mb-4">
+                <div class="col-md-3 d-flex justify-content-md-end">
+                  <span class="ac-label-box">Cama</span>
+                </div>
+                <div class="col-md-3">
+                  <select id="ac-cama" class="form-select ac-input">
+                    <option value="">Cargando camas...</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- RADIO MENOR / ADULTO / EMBARAZADA -->
+              <div class="row mb-4">
+                <div class="col-md-6 offset-md-3">
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="grupoPaciente" id="pacMenor" value="nino">
+                    <label class="form-check-label ac-radio-label" for="pacMenor">
+                      Menor
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="grupoPaciente" id="pacAdulto" value="adulto">
+                    <label class="form-check-label ac-radio-label" for="pacAdulto">
+                      Adulto
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="grupoPaciente" id="pacEmbarazada" value="embarazada">
+                    <label class="form-check-label ac-radio-label" for="pacEmbarazada">
+                      Embarazada
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <!-- BOTÓN GUARDAR CON ICONO -->
+              <div class="d-flex justify-content-center mt-3">
+                <div class="text-center">
+                  <button type="submit" id="btn-guardar-acostar" class="ac-icon-btn" title="Guardar">
+                    <img src="img/icono-guardar.png" alt="Guardar" class="ac-icon">
+                  </button>
+                </div>
+              </div>
+
+            </form>
+
+          </div>
+        </div>
+
+      </div>
+    </main>
+
+  </div>
 
 <script>
   /* ===== UTILIDADES ===== */
@@ -423,7 +435,7 @@
     beds[camaAsignada] = {
       type: tipoPaciente,
       patient: paciente
-    };bbb
+    };
 
     // Guardar camas actualizadas
     localStorage.setItem('shadt_camas', JSON.stringify(beds));
@@ -433,6 +445,38 @@
 
     alert('Paciente acostado en la Cama ' + camaAsignada);
     window.location.href = 'estadia_alta.html';
+  });
+</script>
+
+<!-- SCRIPT PARA MOSTRAR EL USUARIO EN LA SIDEBAR Y MANEJAR EL TOGGLE -->
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    // Mostrar usuario
+    const spanUser = document.getElementById('shadt-username');
+    if (spanUser) {
+      try {
+        const raw = localStorage.getItem('shadt_user');
+        if (raw) {
+          const user = JSON.parse(raw);
+          if (user && user.nombre) {
+            spanUser.textContent = user.nombre;
+          }
+        }
+      } catch (e) {
+        console.error('Error leyendo shadt_user', e);
+      }
+    }
+
+    // Toggle de sidebar en móvil
+    const btnToggle = document.getElementById('sidebarToggle');
+    if (btnToggle) {
+      btnToggle.addEventListener('click', function () {
+        const sidebar = document.querySelector('.sidebar');
+        if (sidebar) {
+          sidebar.classList.toggle('show');
+        }
+      });
+    }
   });
 </script>
 

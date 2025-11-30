@@ -40,6 +40,14 @@
     .sv-msg {
       font-size:0.8rem;
     }
+
+    /* Botón hamburguesa en móvil */
+    .sidebar-toggle-btn {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      z-index: 20;
+    }
   </style>
 </head>
 <body class="app-body">
@@ -47,7 +55,7 @@
 <div class="d-flex">
 
   <!-- SIDEBAR -->
-  <aside class="sidebar bg-dark text-white">
+  <aside id="sidebar" class="sidebar bg-dark text-white">
     <div class="p-3 text-center border-bottom border-secondary">
       <div class="shadt-logo-side mb-1">SHADT</div>
     </div>
@@ -64,7 +72,7 @@
     </nav>
 
     <div class="mt-auto p-3 border-top border-secondary small">
-      <div>Usuario: <strong>Desarrollador</strong></div>
+      <div>Usuario: <strong id="shadt-username">Desarrollador</strong></div>
       <a href="modulos.html" class="text-decoration-none text-light d-block mb-1">
         Ir a módulos
       </a>
@@ -77,6 +85,16 @@
   <!-- CONTENIDO -->
   <main class="flex-grow-1 app-main app-bg-medico">
     <div class="container py-4">
+
+      <!-- BOTÓN HAMBURGUESA SOLO EN MÓVIL -->
+      <button
+        class="btn btn-outline-light d-lg-none sidebar-toggle-btn"
+        type="button"
+        id="sidebarToggle"
+        aria-label="Abrir menú"
+      >
+        ☰
+      </button>
 
       <h1 class="h5 mb-2">Signos vitales del paciente</h1>
       <div id="sv-msg" class="sv-msg text-primary mb-3"></div>
@@ -297,6 +315,40 @@
     } else {
       fieldset.disabled = false;
       setSvMsg('Paciente activo. Puede registrar signos vitales.', 'ok');
+    }
+
+    /* === USUARIO EN SIDEBAR Y TOGGLE LATERAL === */
+    const spanUser = document.getElementById('shadt-username');
+    if (spanUser) {
+      try {
+        const rawUser = localStorage.getItem('shadt_user');
+        if (rawUser) {
+          const user = JSON.parse(rawUser);
+          if (user && user.nombre) {
+            spanUser.textContent = user.nombre;
+          }
+        }
+      } catch (e) {
+        console.error('Error leyendo shadt_user', e);
+      }
+    }
+
+    const sidebar = document.getElementById('sidebar');
+    const toggleBtn = document.getElementById('sidebarToggle');
+    if (sidebar && toggleBtn) {
+      toggleBtn.addEventListener('click', function () {
+        sidebar.classList.toggle('show');
+      });
+
+      // Cerrar sidebar al hacer clic en un enlace en móvil
+      const links = sidebar.querySelectorAll('.nav-link');
+      links.forEach(link => {
+        link.addEventListener('click', function () {
+          if (window.innerWidth <= 768) {
+            sidebar.classList.remove('show');
+          }
+        });
+      });
     }
   });
 
