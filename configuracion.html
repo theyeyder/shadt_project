@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SHADT - Configuración</title>
+
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  >
+  <link rel="stylesheet" href="css/styles.css">
+
+  <style>
+    .cfg-label-box {
+      background-color: #7FE6F3;
+      color: #000;
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 0.8rem;
+      padding: 3px 8px;
+      border-radius: 2px;
+      text-align: center;
+      letter-spacing: 0.5px;
+      min-width: 90px;
+      display: inline-block;
+    }
+
+    .cfg-input {
+      height: 30px;
+      font-size: 0.9rem;
+      padding: 2px 8px;
+      text-align: center;
+    }
+
+    .cfg-msg {
+      font-size: 0.8rem;
+    }
+
+    .cfg-badge-user {
+      font-size: 0.8rem;
+    }
+  </style>
+</head>
+<body class="app-body">
+
+<!-- BOTÓN MENU LATERAL (solo móvil) -->
+<button
+  id="sidebarToggle"
+  type="button"
+  class="btn btn-primary d-md-none sidebar-toggle-btn"
+  aria-label="Abrir menú"
+>
+  ☰
+</button>
+
+<div class="d-flex">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar bg-dark text-white">
+    <div class="p-3 text-center border-bottom border-secondary">
+      <div class="shadt-logo-side mb-1">SHADT</div>
+    </div>
+
+    <nav class="nav flex-column p-2 mt-2">
+      <span class="text-uppercase text-muted small mb-2">Módulos</span>
+      <a href="admision.html" class="nav-link text-white">ADMISIÓN</a>
+      <a href="signos_vitales.html" class="nav-link text-white">SIGNOS VITALES</a>
+      <a href="historia_clinica.html" class="nav-link text-white">HISTORIA CLÍNICA</a>
+      <a href="salida.html" class="nav-link text-white">SALIDA</a>
+      <a href="acostar.html" class="nav-link text-white">ACOSTAR</a>
+      <a href="estadia_alta.html" class="nav-link text-white">ESTADÍA Y ALTA PACIENTE</a>
+      <a href="informes.html" class="nav-link text-white">INFORMES</a>
+      <!-- Opción de configuración -->
+      <a href="configuracion.html" class="nav-link text-white active">CONFIGURACIÓN</a>
+    </nav>
+
+    <div class="mt-auto p-3 border-top border-secondary small">
+      <div>Usuario: <strong id="shadt-username">Desarrollador</strong></div>
+      <a href="modulos.html" class="text-decoration-none text-light d-block mb-1">
+        Ir a módulos
+      </a>
+      <a href="index.html" class="text-decoration-none text-danger">
+        Cerrar sesión
+      </a>
+    </div>
+  </aside>
+
+  <!-- CONTENIDO -->
+  <main class="flex-grow-1 app-main app-bg-medico">
+    <div class="container py-4">
+
+      <h1 class="h5 mb-2">Configuración de usuarios</h1>
+      <div id="cfg-msg" class="cfg-msg text-primary mb-3"></div>
+
+      <!-- Usuario actual -->
+      <div class="card bg-semitransparent mb-3">
+        <div class="card-body">
+          <h6 class="mb-2">Usuario actual de sesión</h6>
+          <p class="mb-1">
+            <strong>Nombre mostrado:</strong>
+            <span id="cfg-actual-nombre" class="badge bg-info text-dark cfg-badge-user">-</span>
+          </p>
+          <p class="mb-1">
+            <strong>Conexión:</strong>
+            <span id="cfg-actual-conexion" class="badge bg-secondary cfg-badge-user">-</span>
+          </p>
+          <p class="mb-0">
+            <strong>Usuario (login):</strong>
+            <span id="cfg-actual-login" class="badge bg-secondary cfg-badge-user">-</span>
+          </p>
+        </div>
+      </div>
+
+      <!-- Formulario de usuario -->
+      <div class="card bg-semitransparent mb-3">
+        <div class="card-body">
+          <h6 class="mb-3">Crear / editar usuario</h6>
+
+          <form id="cfg-form-usuario">
+            <!-- ID oculto para edición -->
+            <input type="hidden" id="cfg-id">
+
+            <!-- Nombre mostrado -->
+            <div class="row g-2 align-items-center mb-2">
+              <div class="col-md-3 d-flex justify-content-md-end">
+                <span class="cfg-label-box">Nombre mostrado</span>
+              </div>
+              <div class="col-md-6">
+                <input type="text" id="cfg-nombre" class="form-control cfg-input" placeholder="Nombre que verá la aplicación">
+              </div>
+            </div>
+
+            <!-- Contraseña -->
+            <div class="row g-2 align-items-center mb-2">
+              <div class="col-md-3 d-flex justify-content-md-end">
+                <span class="cfg-label-box">Contraseña</span>
+              </div>
+              <div class="col-md-4">
+                <input type="password" id="cfg-pass" class="form-control cfg-input" placeholder="Contraseña">
+              </div>
+            </div>
+
+            <!-- Repetir contraseña -->
+            <div class="row g-2 align-items-center mb-2">
+              <div class="col-md-3 d-flex justify-content-md-end">
+                <span class="cfg-label-box">Repetir contraseña</span>
+              </div>
+              <div class="col-md-4">
+                <input type="password" id="cfg-pass2" class="form-control cfg-input" placeholder="Repita la contraseña">
+              </div>
+            </div>
+
+            <!-- Usuario (login) -->
+            <div class="row g-2 align-items-center mb-2">
+              <div class="col-md-3 d-flex justify-content-md-end">
+                <span class="cfg-label-box">Usuario (login)</span>
+              </div>
+              <div class="col-md-6">
+                <input type="text" id="cfg-usuario" class="form-control cfg-input" placeholder="usuario.login">
+              </div>
+            </div>
+
+            <!-- Conexión -->
+            <div class="row g-2 align-items-center mb-2">
+              <div class="col-md-3 d-flex justify-content-md-end">
+                <span class="cfg-label-box">Conexión</span>
+              </div>
+              <div class="col-md-4">
+                <select id="cfg-conexion" class="form-select cfg-input">
+                  <option value="">Seleccione</option>
+                  <option value="Salud">Salud</option>
+                  <option value="Prueba">Prueba</option>
+                  <option value="Soporte">Soporte</option>
+                  <option value="Admin">Admin</option>
+                  <option value="Desarrollador">Desarrollador</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Estado -->
+            <div class="row g-2 align-items-center mb-2">
+              <div class="col-md-3 d-flex justify-content-md-end">
+                <span class="cfg-label-box">Estado</span>
+              </div>
+              <div class="col-md-4">
+                <select id="cfg-estado" class="form-select cfg-input">
+                  <option value="activo">Activo</option>
+                  <option value="inactivo">Inactivo</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="mt-3 d-flex justify-content-end gap-2">
+              <button type="button" id="cfg-btn-nuevo" class="btn btn-secondary btn-sm">Nuevo</button>
+              <button type="submit" class="btn btn-success btn-sm">Guardar usuario</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Listado de usuarios -->
+      <div class="card bg-semitransparent">
+        <div class="card-body">
+          <h6 class="mb-3">Usuarios registrados</h6>
+          <div class="table-responsive">
+            <table class="table table-sm table-striped align-middle mb-0">
+              <thead>
+                <tr>
+                  <th>Nombre mostrado</th>
+                  <th>Usuario</th>
+                  <th>Conexión</th>
+                  <th>Estado</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="cfg-tbody-usuarios">
+                <!-- Filas generadas por JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+  /* ==== UTILIDADES DE USUARIOS ==== */
+
+  function setCfgMsg(texto, tipo = 'info') {
+    const msg = document.getElementById('cfg-msg');
+    msg.classList.remove('text-primary', 'text-danger', 'text-success');
+    if (tipo === 'error') msg.classList.add('text-danger');
+    else if (tipo === 'ok') msg.classList.add('text-success');
+    else msg.classList.add('text-primary');
+    msg.textContent = texto || '';
+  }
+
+  function getUsersStore() {
+    const raw = localStorage.getItem('shadt_users');
+    return raw ? JSON.parse(raw) : [];
+  }
+
+  function saveUsersStore(users) {
+    localStorage.setItem('shadt_users', JSON.stringify(users));
+  }
+
+  function loadCurrentUserHeader() {
+    const spanUserSidebar = document.getElementById('shadt-username');
+    const spanNombre = document.getElementById('cfg-actual-nombre');
+    const spanConexion = document.getElementById('cfg-actual-conexion');
+    const spanLogin = document.getElementById('cfg-actual-login');
+
+    try {
+      const raw = localStorage.getItem('shadt_user');
+      if (!raw) {
+        if (spanUserSidebar) spanUserSidebar.textContent = 'Desarrollador';
+        spanNombre.textContent = '-';
+        spanConexion.textContent = '-';
+        spanLogin.textContent = '-';
+        return;
+      }
+
+      const user = JSON.parse(raw);
+      const nombre = user.nombre || 'Desarrollador';
+
+      if (spanUserSidebar) spanUserSidebar.textContent = nombre;
+      spanNombre.textContent = nombre;
+      spanConexion.textContent = user.conexion || '-';
+      spanLogin.textContent = user.usuario || '-';
+    } catch (e) {
+      console.error('Error leyendo shadt_user', e);
+    }
+  }
+
+  function renderUsersTable() {
+    const tbody = document.getElementById('cfg-tbody-usuarios');
+    const users = getUsersStore();
+
+    if (!users.length) {
+      tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted">No hay usuarios registrados.</td></tr>';
+      return;
+    }
+
+    let html = '';
+    users.forEach(u => {
+      html += `
+        <tr>
+          <td>${u.nombre || ''}</td>
+          <td>${u.usuario || ''}</td>
+          <td>${u.conexion || ''}</td>
+          <td>
+            <span class="badge ${u.estado === 'activo' ? 'bg-success' : 'bg-secondary'}">
+              ${u.estado === 'activo' ? 'ACTIVO' : 'INACTIVO'}
+            </span>
+          </td>
+          <td>
+            <button type="button" class="btn btn-sm btn-primary me-1" onclick="cfgEditarUsuario('${u.id}')">
+              Editar
+            </button>
+            <button type="button" class="btn btn-sm btn-danger me-1" onclick="cfgEliminarUsuario('${u.id}')">
+              Eliminar
+            </button>
+            <button type="button" class="btn btn-sm btn-outline-success" onclick="cfgUsarUsuario('${u.id}')">
+              Usar
+            </button>
+          </td>
+        </tr>
+      `;
+    });
+
+    tbody.innerHTML = html;
+  }
+
+  function limpiarFormularioUsuario() {
+    document.getElementById('cfg-id').value = '';
+    document.getElementById('cfg-nombre').value = '';
+    document.getElementById('cfg-usuario').value = '';
+    document.getElementById('cfg-conexion').value = '';
+    document.getElementById('cfg-estado').value = 'activo';
+    document.getElementById('cfg-pass').value = '';
+    document.getElementById('cfg-pass2').value = '';
+  }
+
+  // Acciones globales (para usar en atributos onclick)
+  function cfgEditarUsuario(id) {
+    const users = getUsersStore();
+    const u = users.find(x => x.id === id);
+    if (!u) return;
+
+    document.getElementById('cfg-id').value = u.id;
+    document.getElementById('cfg-nombre').value = u.nombre || '';
+    document.getElementById('cfg-usuario').value = u.usuario || '';
+    document.getElementById('cfg-conexion').value = u.conexion || '';
+    document.getElementById('cfg-estado').value = u.estado || 'activo';
+
+    // No cargamos la contraseña por seguridad
+    document.getElementById('cfg-pass').value = '';
+    document.getElementById('cfg-pass2').value = '';
+
+    setCfgMsg('Editando usuario: ' + (u.nombre || u.usuario), 'info');
+  }
+
+  function cfgEliminarUsuario(id) {
+    if (!confirm('¿Seguro que desea eliminar este usuario?')) return;
+
+    let users = getUsersStore();
+    users = users.filter(x => x.id !== id);
+    saveUsersStore(users);
+    renderUsersTable();
+    setCfgMsg('Usuario eliminado correctamente.', 'ok');
+  }
+
+  function cfgUsarUsuario(id) {
+    const users = getUsersStore();
+    const u = users.find(x => x.id === id);
+    if (!u) return;
+
+    const shadtUser = {
+      nombre: u.nombre || u.conexion || u.usuario || 'Usuario',
+      conexion: u.conexion || '',
+      usuario: u.usuario || ''
+    };
+
+    localStorage.setItem('shadt_user', JSON.stringify(shadtUser));
+    loadCurrentUserHeader();
+    setCfgMsg('Usuario establecido como usuario actual de la sesión.', 'ok');
+    alert('Usuario actual cambiado a: ' + shadtUser.nombre);
+  }
+
+  /* ==== INICIALIZACIÓN ==== */
+  document.addEventListener('DOMContentLoaded', function () {
+    // Cargar datos de usuario actual en header y sidebar
+    loadCurrentUserHeader();
+
+    // Renderizar tabla de usuarios
+    renderUsersTable();
+
+    // Botón NUEVO
+    document.getElementById('cfg-btn-nuevo').addEventListener('click', function () {
+      limpiarFormularioUsuario();
+      setCfgMsg('Formulario limpio para crear un nuevo usuario.', 'info');
+    });
+
+    // Guardar usuario
+    document.getElementById('cfg-form-usuario').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const id = document.getElementById('cfg-id').value;
+      const nombre = document.getElementById('cfg-nombre').value.trim();
+      const usuario = document.getElementById('cfg-usuario').value.trim();
+      const conexion = document.getElementById('cfg-conexion').value;
+      const estado = document.getElementById('cfg-estado').value;
+      const pass = document.getElementById('cfg-pass').value;
+      const pass2 = document.getElementById('cfg-pass2').value;
+
+      if (!nombre) {
+        alert('Digite el nombre mostrado.');
+        return;
+      }
+      if (!usuario) {
+        alert('Digite el usuario (login).');
+        return;
+      }
+      if (!conexion) {
+        alert('Seleccione una conexión.');
+        return;
+      }
+
+      const users = getUsersStore();
+
+      // NUEVO USUARIO
+      if (!id) {
+        if (!pass || !pass2) {
+          alert('Digite y repita la contraseña para el nuevo usuario.');
+          return;
+        }
+        if (pass !== pass2) {
+          alert('Las contraseñas no coinciden.');
+          return;
+        }
+
+        const nuevo = {
+          id: 'u_' + Date.now(),
+          nombre,
+          usuario,
+          conexion,
+          estado,
+          pass,
+          creadoEn: new Date().toISOString()
+        };
+        users.push(nuevo);
+
+      // EDITAR USUARIO
+      } else {
+        const idx = users.findIndex(x => x.id === id);
+        if (idx >= 0) {
+          users[idx].nombre = nombre;
+          users[idx].usuario = usuario;
+          users[idx].conexion = conexion;
+          users[idx].estado = estado;
+
+          // Si se digitó nueva contraseña, se actualiza
+          if (pass || pass2) {
+            if (pass !== pass2) {
+              alert('Las contraseñas no coinciden.');
+              return;
+            }
+            users[idx].pass = pass;
+          }
+        }
+      }
+
+      saveUsersStore(users);
+      renderUsersTable();
+      limpiarFormularioUsuario();
+      setCfgMsg('Usuario guardado correctamente.', 'ok');
+    });
+
+    // Toggle de sidebar en móvil
+    const btnToggle = document.getElementById('sidebarToggle');
+    if (btnToggle) {
+      btnToggle.addEventListener('click', function () {
+        const sidebar = document.querySelector('.sidebar');
+        if (sidebar) {
+          sidebar.classList.toggle('show');
+        }
+      });
+    }
+  });
+</script>
+
+</body>
+</html>
